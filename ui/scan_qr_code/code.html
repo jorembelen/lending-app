@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-tertiary": "#68000f",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-tint": "#abd600",
+                    "inverse-primary": "#506600",
+                    "secondary-container": "#474746",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "secondary": "#c8c6c5",
+                    "on-primary": "#283500",
+                    "on-primary-container": "#556d00",
+                    "on-error": "#690005",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "error-container": "#93000a",
+                    "outline-variant": "#444933",
+                    "on-tertiary-container": "#b6353a",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "surface-container": "#201f1f",
+                    "on-secondary": "#313030",
+                    "on-surface-variant": "#c4c9ac",
+                    "primary-container": "#c3f400",
+                    "on-error-container": "#ffdad6",
+                    "tertiary": "#ffffff",
+                    "surface": "#131313",
+                    "surface-variant": "#353534",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "outline": "#8e9379",
+                    "on-secondary-container": "#b7b5b4",
+                    "primary": "#ffffff",
+                    "primary-fixed-dim": "#abd600",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-bright": "#3a3939",
+                    "surface-container-highest": "#353534",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-primary-fixed": "#161e00",
+                    "on-tertiary-fixed-variant": "#8c1520",
+                    "on-background": "#e5e2e1",
+                    "surface-dim": "#131313",
+                    "on-surface": "#e5e2e1",
+                    "background": "#131313",
+                    "tertiary-fixed": "#ffdad8",
+                    "inverse-on-surface": "#313030",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#410006",
+                    "inverse-surface": "#e5e2e1",
+                    "tertiary-container": "#ffdad8",
+                    "secondary-fixed": "#e5e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "stack-sm": "12px",
+                    "touch-target-min": "48px",
+                    "stack-md": "24px",
+                    "base": "8px",
+                    "margin-mobile": "20px",
+                    "stack-lg": "40px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scanner-frame {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7);
+        }
+        .scanner-corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: #c3f400; /* primary-fixed */
+            border-style: solid;
+        }
+        .scan-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #c3f400, transparent);
+            box-shadow: 0 0 15px #c3f400;
+            animation: scan 2.5s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Camera Feed Mockup (Full Screen) -->
+<div class="fixed inset-0 z-0 bg-[#0A0A0A]">
+<div class="w-full h-full opacity-60 grayscale scale-110 blur-[1px]">
+<div class="w-full h-full bg-cover bg-center" data-alt="A first-person perspective shot of a dark industrial office setting at night. The lighting is dim with high contrast shadows. A digital loan agreement paper sits on a dark charcoal desk. The overall aesthetic is gritty, high-energy, and technical, utilizing a dark color palette with electric lime highlights visible on nearby digital screens. High-contrast modernism style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsrkqshlJlvep1DdPlfjOru2RMgY2LHW0AbRIQbYQ8WELsSm6i1Ey_PvX_j6h6514W80QLd7jkm4ArUlZQY676Qj6h3JNe8OLIRUhO1nabQw12reFl_USIFwBwbQ3xDrFyVW6gWQ2K_DWrGMA-aJFj9XKlRV4tJ9wq-6SrMCoM2B7Vw7gk7Vj1sUG45ZmB0zmQ50-4B8NsGfTldV61nI3xci3i7jcgwxwF1r1rJzp3-PnM4vAoWHlJuLIyPHEFsbhRnMqSELQhuWMA')"></div>
+</div>
+</div>
+<!-- UI Overlay: Top Bar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-margin-mobile h-touch-target-min">
+<button aria-label="Close Scanner" class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container/40 backdrop-blur-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary">close</span>
+</button>
+<div class="bg-surface-container/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-wider">Scanning QR</span>
+</div>
+<button aria-label="Toggle Flashlight" class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container/40 backdrop-blur-md active:scale-95 transition-transform" id="flashlight-toggle">
+<span class="material-symbols-outlined text-primary">flashlight_on</span>
+</button>
+</header>
+<!-- Scanner Viewfinder Container -->
+<main class="fixed inset-0 flex items-center justify-center z-10">
+<div class="scanner-frame rounded-2xl flex items-center justify-center">
+<!-- Corners -->
+<div class="scanner-corner top-0 left-0 border-t-4 border-l-4 rounded-tl-xl"></div>
+<div class="scanner-corner top-0 right-0 border-t-4 border-r-4 rounded-tr-xl"></div>
+<div class="scanner-corner bottom-0 left-0 border-b-4 border-l-4 rounded-bl-xl"></div>
+<div class="scanner-corner bottom-0 right-0 border-b-4 border-r-4 rounded-br-xl"></div>
+<!-- Scanning Animation -->
+<div class="scan-line"></div>
+<!-- Target Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-40">
+<span class="material-symbols-outlined text-primary-fixed text-6xl" style="font-variation-settings: 'wght' 200;">qr_code_2</span>
+</div>
+</div>
+</main>
+<!-- Bottom Actions Area -->
+<footer class="fixed bottom-0 w-full z-50 pb-safe px-margin-mobile pt-8 bg-gradient-to-t from-background via-background/80 to-transparent">
+<div class="max-w-md mx-auto flex flex-col items-center gap-stack-md mb-8">
+<p class="text-on-surface-variant text-center font-body-md px-8">
+                Align the customer's QR code within the frame to verify identity and process payment.
+            </p>
+<a class="w-full flex items-center justify-center h-14 bg-primary-fixed text-on-primary-fixed rounded-xl font-label-md text-label-md uppercase tracking-tight active:scale-95 transition-transform" href="#">
+                Open Camera Gallery
+            </a>
+<button class="flex items-center gap-2 text-primary-fixed hover:text-primary transition-colors py-2 active:scale-95">
+<span class="font-label-md text-label-md underline underline-offset-4 decoration-primary-fixed/40">Can't scan? Search borrower manually</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Contextual FAB (Hidden on this transactional screen as per instruction) -->
+<!-- Micro-interactions Script -->
+<script>
+        const flashBtn = document.getElementById('flashlight-toggle');
+        let flashOn = false;
+        
+        flashBtn.addEventListener('click', () => {
+            flashOn = !flashOn;
+            const icon = flashBtn.querySelector('.material-symbols-outlined');
+            if (flashOn) {
+                icon.textContent = 'flashlight_off';
+                flashBtn.classList.remove('bg-surface-container/40');
+                flashBtn.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+                icon.classList.remove('text-primary');
+                icon.classList.add('text-on-primary-fixed');
+            } else {
+                icon.textContent = 'flashlight_on';
+                flashBtn.classList.add('bg-surface-container/40');
+                flashBtn.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+                icon.classList.add('text-primary');
+                icon.classList.remove('text-on-primary-fixed');
+            }
+        });
+
+        // Simple haptic-like vibration on button clicks if supported
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', () => {
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            });
+        });
+    </script>
+</body></html>

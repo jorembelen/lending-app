@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Voltage Fintech Admin | LendingPro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1e1f26",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary": "#313030",
+                        "on-surface-variant": "#c4c9ac",
+                        "secondary-container": "#4a4949",
+                        "tertiary": "#ffffff",
+                        "on-secondary-container": "#bab8b7",
+                        "surface-container-low": "#1a1b22",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "surface-bright": "#383940",
+                        "on-primary-container": "#556d00",
+                        "surface-container-high": "#282a31",
+                        "inverse-on-surface": "#2f3037",
+                        "primary-container": "#c3f400",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#303030",
+                        "primary": "#ffffff",
+                        "inverse-primary": "#506600",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-primary-fixed": "#161e00",
+                        "error": "#ffb4ab",
+                        "on-primary": "#283500",
+                        "surface-dim": "#12131a",
+                        "on-tertiary-container": "#656464",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "primary-fixed": "#c3f400",
+                        "surface-tint": "#abd600",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#33343c",
+                        "surface": "#12131a",
+                        "inverse-surface": "#e2e1eb",
+                        "outline-variant": "#444933",
+                        "on-surface": "#e2e1eb",
+                        "on-error": "#690005",
+                        "on-background": "#e2e1eb",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "primary-fixed-dim": "#abd600",
+                        "surface-variant": "#33343c",
+                        "tertiary-container": "#e5e2e1",
+                        "background": "#12131a",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "on-tertiary-fixed": "#1b1b1c",
+                        "secondary": "#c8c6c5",
+                        "outline": "#8e9379",
+                        "on-secondary-fixed-variant": "#474646",
+                        "surface-container-lowest": "#0c0e14"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin": "32px",
+                        "topbar_height": "64px",
+                        "gutter": "24px",
+                        "sidebar_width": "280px",
+                        "base_unit": "4px"
+                    },
+                    "fontFamily": {
+                        "data-table": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "data-table": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #12131a;
+            color: #e2e1eb;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container border-r border-outline-variant flex flex-col h-full py-4 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-fixed rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed font-bold">bolt</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary leading-tight">LendingPro</h1>
+<p class="font-body-sm text-body-sm text-secondary-fixed-dim">Enterprise Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 border-l-2 border-primary-fixed bg-surface-container-high text-primary font-bold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-body-md text-body-md">Borrowers</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">payments</span>
+<span class="font-body-md text-body-md">Loans</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">account_balance_wallet</span>
+<span class="font-body-md text-body-md">Collections</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">card_giftcard</span>
+<span class="font-body-md text-body-md">Loyalty &amp; Rebates</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-6 space-y-4">
+<button class="w-full py-3 px-4 border border-outline text-primary font-bold hover:bg-surface-container-highest transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">help_center</span>
+                Support
+            </button>
+<div class="pt-4 border-t border-outline-variant">
+<a class="flex items-center py-2 text-secondary-fixed-dim hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mr-3">account_circle</span>
+<span class="font-body-md text-body-md">Profile</span>
+</a>
+<a class="flex items-center py-2 text-error hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[280px] w-[calc(100%-280px)] min-h-screen flex flex-col">
+<!-- TopNavBar Shell -->
+<header class="h-[64px] bg-surface border-b border-outline-variant flex justify-between items-center px-8 sticky top-0 z-40">
+<div class="flex items-center bg-surface-container-low border border-outline-variant px-3 py-1.5 w-96 group focus-within:border-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-secondary-fixed-dim mr-2 text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-secondary-fixed-dim/50" placeholder="Search loans, borrowers, or transactions..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-primary-fixed text-on-primary-fixed px-5 py-2 font-bold text-label-caps flex items-center gap-2 hover:brightness-110 active:opacity-80 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    + NEW LOAN
+                </button>
+<button class="relative text-secondary-fixed-dim hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary-fixed rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant">
+<img class="w-8 h-8 rounded-full border border-outline" data-alt="A professional headshot of a female fintech executive with sharp features, wearing a dark navy blazer, set against a blurred modern office background with cool tones and subtle glass reflections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ3p4k2rocan3nudmN_7OqDZ2rtf-Z5XPfmoxoVvdSpKtuvfaOUtEI2kpvlk5y-P2JY3NPJn-ArhQ1b_V5nNZE9NGKmsY9JMMl99xWfbSUGiU5leR-fCCs59mmHmGs-qUGDsqcU7H7H0L1wko3xEUofp-Yt0qIjfW0dBQfd1myIfgRmAEaPZlZnKUC8ft_C5eNtkNMmgcWSQd1lBwXn737usT2BR1dq84R1yAyiA0uRo4CMyFcFL9bdE7AkHUrrrIhFN7RZUpswctH"/>
+<div class="flex flex-col">
+<span class="text-label-caps text-primary leading-none">Admin User</span>
+<span class="text-[10px] text-secondary-fixed-dim">Super Admin</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+<!-- KPI 1 -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider mb-2">Total Collected Today</p>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight">₱142,280.50</h2>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="text-primary-fixed bg-on-primary-container/20 px-2 py-0.5 text-[12px] font-bold">+12%</span>
+<span class="text-body-sm text-secondary-fixed-dim text-[12px]">vs yesterday</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider mb-2">Total Outstanding</p>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight">₱4.2M</h2>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<div class="w-full h-1 bg-surface-container-highest">
+<div class="bg-primary-fixed w-[65%] h-full"></div>
+</div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider mb-2">Active Loans</p>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight">842</h2>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed text-[16px]">trending_up</span>
+<span class="text-body-sm text-secondary-fixed-dim text-[12px]">Steady growth</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container border border-outline-variant p-6 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider mb-2">Arrears Rate</p>
+<h2 class="font-display-lg text-display-lg text-error tracking-tight">3.2%</h2>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="text-error bg-error-container/20 px-2 py-0.5 text-[12px] font-bold">+0.4%</span>
+<span class="text-body-sm text-secondary-fixed-dim text-[12px]">Negative trend</span>
+</div>
+</div>
+</div>
+<!-- Main Chart Section -->
+<section class="bg-surface-container border border-outline-variant p-8">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="font-title-sm text-title-sm text-primary mb-1">Collections Trend</h3>
+<p class="text-body-sm text-secondary-fixed-dim">Daily volume overview for the last 30 days</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 border border-outline-variant text-label-caps hover:bg-surface-container-highest transition-colors">WTD</button>
+<button class="px-4 py-1.5 border border-primary-fixed bg-surface-container-high text-primary-fixed text-label-caps">MTD</button>
+<button class="px-4 py-1.5 border border-outline-variant text-label-caps hover:bg-surface-container-highest transition-colors">YTD</button>
+</div>
+</div>
+<div class="chart-container w-full overflow-hidden">
+<!-- SVG Chart Logic -->
+<svg class="w-full h-full overflow-visible" viewbox="0 0 1000 300">
+<!-- Grid Lines -->
+<line stroke="#2D2D2D" stroke-width="1" x1="0" x2="1000" y1="0" y2="0"></line>
+<line stroke="#2D2D2D" stroke-width="1" x1="0" x2="1000" y1="75" y2="75"></line>
+<line stroke="#2D2D2D" stroke-width="1" x1="0" x2="1000" y1="150" y2="150"></line>
+<line stroke="#2D2D2D" stroke-width="1" x1="0" x2="1000" y1="225" y2="225"></line>
+<line stroke="#2D2D2D" stroke-width="1" x1="0" x2="1000" y1="300" y2="300"></line>
+<!-- Area Fill -->
+<path d="M0,300 L0,220 C100,240 200,100 300,150 C400,200 500,50 600,120 C700,180 800,40 900,80 L1000,60 L1000,300 Z" fill="url(#gradient-lime)" opacity="0.1"></path>
+<!-- Line -->
+<path d="M0,220 C100,240 200,100 300,150 C400,200 500,50 600,120 C700,180 800,40 900,80 L1000,60" fill="none" stroke="#c3f400" stroke-linecap="round" stroke-width="3"></path>
+<!-- Definitions -->
+<defs>
+<lineargradient id="gradient-lime" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#c3f400;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#c3f400;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<!-- Interactive Points -->
+<circle cx="300" cy="150" fill="#c3f400" r="6" stroke="#12131a" stroke-width="2"></circle>
+<circle cx="600" cy="120" fill="#c3f400" r="6" stroke="#12131a" stroke-width="2"></circle>
+<circle cx="900" cy="80" fill="#c3f400" r="6" stroke="#12131a" stroke-width="2"></circle>
+</svg>
+</div>
+<div class="flex justify-between mt-4">
+<span class="text-label-caps text-secondary-fixed-dim">Oct 01</span>
+<span class="text-label-caps text-secondary-fixed-dim">Oct 07</span>
+<span class="text-label-caps text-secondary-fixed-dim">Oct 14</span>
+<span class="text-label-caps text-secondary-fixed-dim">Oct 21</span>
+<span class="text-label-caps text-secondary-fixed-dim text-primary">Today</span>
+</div>
+</section>
+<!-- Lower Section Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Collector Performance Table -->
+<div class="lg:col-span-2 bg-surface-container border border-outline-variant">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm text-primary">Collector Performance</h3>
+<button class="text-label-caps text-primary-fixed hover:underline">View All Teams</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim">Rank</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim">Collector Name</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim">Assigned</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim text-right">Collected Today</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim">Completion %</th>
+</tr>
+</thead>
+<tbody class="font-data-table text-data-table">
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-primary">01</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-primary-fixed/20 text-primary-fixed rounded-full flex items-center justify-center text-[10px]">JD</div>
+                                            Jane Doe
+                                        </div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">124</td>
+<td class="px-6 py-4 text-right text-primary">₱42,150.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full">
+<div class="w-[92%] h-full bg-primary-fixed rounded-full"></div>
+</div>
+<span>92%</span>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-primary">02</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-secondary-fixed/20 text-secondary-fixed rounded-full flex items-center justify-center text-[10px]">MB</div>
+                                            Mark Bishop
+                                        </div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">118</td>
+<td class="px-6 py-4 text-right text-primary">₱38,400.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full">
+<div class="w-[88%] h-full bg-primary-fixed rounded-full"></div>
+</div>
+<span>88%</span>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-primary">03</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-on-surface-variant/20 text-on-surface-variant rounded-full flex items-center justify-center text-[10px]">SL</div>
+                                            Sarah Lee
+                                        </div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">145</td>
+<td class="px-6 py-4 text-right text-primary">₱31,200.00</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full">
+<div class="w-[74%] h-full bg-primary-fixed rounded-full"></div>
+</div>
+<span>74%</span>
+</div>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 text-primary">04</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-error-container/20 text-error rounded-full flex items-center justify-center text-[10px]">TC</div>
+                                            Tom Cruise
+                                        </div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">98</td>
+<td class="px-6 py-4 text-right text-primary">₱22,530.50</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full">
+<div class="w-[62%] h-full bg-primary-fixed rounded-full"></div>
+</div>
+<span>62%</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right: Recent Activity -->
+<div class="bg-surface-container border border-outline-variant flex flex-col h-full">
+<div class="p-6 border-b border-outline-variant">
+<h3 class="font-title-sm text-title-sm text-primary">Recent Activity</h3>
+</div>
+<div class="p-6 flex-1 space-y-6 overflow-y-auto scrollbar-hide">
+<!-- Activity Item 1 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary-fixed">payment</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 pb-4">
+<p class="text-body-md text-primary"><span class="font-bold">Payment received:</span> #LFC-882910</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">2 mins ago</span>
+<span class="text-label-caps text-primary-fixed">+ ₱1,250.00</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-on-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-tertiary">person_add</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 pb-4">
+<p class="text-body-md text-primary"><span class="font-bold">New Loan released:</span> Marcus Thorne</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">15 mins ago</span>
+<span class="text-label-caps text-primary">₱50,000.00</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-error-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-error">warning</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 pb-4">
+<p class="text-body-md text-primary"><span class="font-bold">Missed payment alert:</span> Elena V.</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">1 hour ago</span>
+<span class="text-label-caps text-error">CRITICAL</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-secondary-fixed-dim">description</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 pb-4">
+<p class="text-body-md text-primary"><span class="font-bold">Loan approved:</span> #LFC-882905</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">3 hours ago</span>
+<span class="text-label-caps text-secondary-fixed-dim">BY ADMIN_ROB</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 5 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-primary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-primary-fixed">payment</span>
+</div>
+<div class="w-px flex-1 bg-outline-variant my-1"></div>
+</div>
+<div class="flex-1 pb-4">
+<p class="text-body-md text-primary"><span class="font-bold">Payment received:</span> #LFC-882890</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">4 hours ago</span>
+<span class="text-label-caps text-primary-fixed">+ ₱4,500.00</span>
+</div>
+</div>
+</div>
+<!-- Activity Item 6 -->
+<div class="flex gap-4">
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-on-secondary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-tertiary">edit_document</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-body-md text-primary"><span class="font-bold">Agreement signed:</span> Sarah J.</p>
+<div class="flex justify-between items-center mt-1">
+<span class="text-label-caps text-secondary-fixed-dim">5 hours ago</span>
+<span class="text-label-caps text-primary">DOC_SIGNED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions for hovering KPI cards
+        document.querySelectorAll('.grid > div').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('bg-surface-container-high');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('bg-surface-container-high');
+            });
+        });
+
+        // Simple real-time update simulation
+        setInterval(() => {
+            const timeAgoElements = document.querySelectorAll('.text-label-caps.text-secondary-fixed-dim');
+            // Logic for visual flair only - no data modification per user request
+        }, 60000);
+    </script>
+</body></html>

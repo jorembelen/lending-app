@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-primary {
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.12);
+        }
+        .loan-card:active {
+            transform: scale(0.98);
+            border-color: #abd600;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0C0E14;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2D2F39;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#feb700",
+                        "inverse-primary": "#506600",
+                        "tertiary": "#ffffff",
+                        "on-tertiary-container": "#bd2c32",
+                        "primary-fixed-dim": "#abd600",
+                        "surface-dim": "#111319",
+                        "secondary-fixed": "#ffdea8",
+                        "outline": "#8e9379",
+                        "error-container": "#93000a",
+                        "surface-bright": "#373940",
+                        "surface-variant": "#33343b",
+                        "secondary": "#ffdb9d",
+                        "surface-container": "#1e1f26",
+                        "surface-container-highest": "#33343b",
+                        "on-tertiary": "#68000d",
+                        "tertiary-fixed-dim": "#ffb3af",
+                        "on-secondary-fixed": "#271900",
+                        "surface-tint": "#abd600",
+                        "on-secondary": "#412d00",
+                        "inverse-on-surface": "#2e3037",
+                        "on-primary": "#283500",
+                        "on-primary-fixed": "#161e00",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-container-lowest": "#0c0e14",
+                        "outline-variant": "#444933",
+                        "on-surface": "#e2e2eb",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed-variant": "#920418",
+                        "surface-container-high": "#282a30",
+                        "on-tertiary-fixed": "#410005",
+                        "on-primary-container": "#556d00",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "primary-container": "#c3f400",
+                        "primary-fixed": "#c3f400",
+                        "secondary-fixed-dim": "#ffba20",
+                        "background": "#111319",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "surface": "#111319",
+                        "tertiary-container": "#ffdad7",
+                        "inverse-surface": "#e2e2eb",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-container-low": "#191b22",
+                        "on-background": "#e2e2eb",
+                        "on-surface-variant": "#c4c9ac",
+                        "primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "lg": "32px",
+                        "card-gap": "12px",
+                        "xs": "8px",
+                        "md": "24px",
+                        "base": "4px",
+                        "container-padding": "20px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "amount-lg": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "amount-sm": ["JetBrains Mono"],
+                        "display": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", {"lineHeight": "30px", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "amount-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "amount-sm": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "display": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md custom-scrollbar">
+<!-- Top Navigation Shell -->
+<header class="w-full sticky top-0 z-50 bg-background dark:bg-background">
+<div class="flex justify-between items-center h-14 px-container-padding">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a confident young Filipino entrepreneur, smiling warmly against a dark charcoal background. The lighting is soft and cinematic, highlighting a modern and approachable fintech aesthetic. The image uses deep shadows and subtle electric lime highlights to match the brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAoTrtFzwN6kr4sDcbkcwWW3nlkAGtZCL-77BGwl00yMO_aPYqZfvb3x75SJACj1lm-BrJ4ehbtxDfX6rjrZTHAjFQ9tGhvCpYRtpZKFKaz4gXyYpYVlfOLfb4i6vqU4h1gtt4A2oNjCjM1qurhvbkVYQeK4MgvJpbflykj4YUdenhSrNqa5yZ9mI-XbTqWJ4PyjVXIwdijSp1akIyShpZ0v4cyjkaKfJlmB8f8Y79s_VOe5kJkvMZbRPy4f_B-U7snEJwhzaZtfWr"/>
+</div>
+<h1 class="font-display text-display text-primary-fixed dark:text-primary-fixed tracking-tight !text-[20px] !leading-none">Voltage</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant p-2 rounded-full transition-transform active:scale-90">
+                    notifications
+                </button>
+</div>
+</div>
+</header>
+<main class="px-container-padding pb-32">
+<!-- Header Section -->
+<section class="mt-lg mb-md">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Loan History</h2>
+<p class="text-on-surface-variant mt-xs">You've successfully completed 3 loans. Great job!</p>
+</section>
+<!-- Stats Overview Bento-ish -->
+<section class="grid grid-cols-2 gap-card-gap mb-lg">
+<div class="bg-surface-container-low border border-outline-variant p-sm rounded-xl">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">TOTAL BORROWED</p>
+<p class="font-amount-lg text-[24px] text-primary">₱25,000</p>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-sm rounded-xl">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-xs">ON-TIME RATE</p>
+<div class="flex items-center gap-xs">
+<p class="font-amount-lg text-[24px] text-primary-fixed">100%</p>
+<span class="material-symbols-outlined text-primary-fixed text-sm">verified_user</span>
+</div>
+</div>
+</section>
+<!-- Loan List -->
+<div class="space-y-card-gap">
+<!-- Loan Card 1 -->
+<div class="loan-card bg-surface-container-low border border-outline-variant p-md rounded-xl transition-all duration-200 glow-primary">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">PRINCIPAL</p>
+<p class="font-amount-lg text-amount-lg text-primary">₱10,000</p>
+</div>
+<span class="bg-primary-container text-on-primary-container font-label-caps text-[10px] px-2 py-1 rounded-full uppercase tracking-widest">Paid On-Time</span>
+</div>
+<div class="grid grid-cols-2 gap-md border-t border-outline-variant pt-sm">
+<div>
+<p class="font-label-caps text-[10px] text-on-surface-variant">TERM</p>
+<p class="text-on-surface font-semibold">30 Days</p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-surface-variant">COMPLETED</p>
+<p class="text-on-surface font-semibold">Aug 15, 2023</p>
+</div>
+</div>
+<div class="mt-md flex items-center justify-between">
+<div class="flex items-center gap-xs text-primary-fixed text-sm font-semibold">
+<span class="material-symbols-outlined text-[18px]">add_task</span>
+<span>Credit Score Boosted</span>
+</div>
+<button class="text-primary-fixed font-label-caps text-label-caps hover:underline transition-all">DETAILS</button>
+</div>
+</div>
+<!-- Loan Card 2 -->
+<div class="loan-card bg-surface-container-low border border-outline-variant p-md rounded-xl transition-all duration-200 opacity-90">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">PRINCIPAL</p>
+<p class="font-amount-lg text-amount-lg text-primary">₱10,000</p>
+</div>
+<span class="bg-primary-container text-on-primary-container font-label-caps text-[10px] px-2 py-1 rounded-full uppercase tracking-widest">Paid On-Time</span>
+</div>
+<div class="grid grid-cols-2 gap-md border-t border-outline-variant pt-sm">
+<div>
+<p class="font-label-caps text-[10px] text-on-surface-variant">TERM</p>
+<p class="text-on-surface font-semibold">30 Days</p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-surface-variant">COMPLETED</p>
+<p class="text-on-surface font-semibold">Jul 12, 2023</p>
+</div>
+</div>
+<div class="mt-md flex items-center justify-between">
+<div class="flex items-center gap-xs text-primary-fixed text-sm font-semibold opacity-60">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+<span>Completed</span>
+</div>
+<button class="text-primary-fixed font-label-caps text-label-caps hover:underline transition-all">DETAILS</button>
+</div>
+</div>
+<!-- Loan Card 3 -->
+<div class="loan-card bg-surface-container-low border border-outline-variant p-md rounded-xl transition-all duration-200 opacity-80">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">PRINCIPAL</p>
+<p class="font-amount-lg text-amount-lg text-primary">₱5,000</p>
+</div>
+<span class="bg-primary-container text-on-primary-container font-label-caps text-[10px] px-2 py-1 rounded-full uppercase tracking-widest">Paid On-Time</span>
+</div>
+<div class="grid grid-cols-2 gap-md border-t border-outline-variant pt-sm">
+<div>
+<p class="font-label-caps text-[10px] text-on-surface-variant">TERM</p>
+<p class="text-on-surface font-semibold">15 Days</p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-surface-variant">COMPLETED</p>
+<p class="text-on-surface font-semibold">Jun 05, 2023</p>
+</div>
+</div>
+<div class="mt-md flex items-center justify-between">
+<div class="flex items-center gap-xs text-primary-fixed text-sm font-semibold opacity-60">
+<span class="material-symbols-outlined text-[18px]">history_edu</span>
+<span>Completed</span>
+</div>
+<button class="text-primary-fixed font-label-caps text-label-caps hover:underline transition-all">DETAILS</button>
+</div>
+</div>
+</div>
+<!-- Call to Action -->
+<div class="mt-lg p-md rounded-2xl bg-gradient-to-br from-surface-container-high to-surface-container-lowest border border-primary-fixed/20 text-center">
+<h3 class="text-primary font-headline-lg-mobile text-[18px] mb-xs">Ready for your next step?</h3>
+<p class="text-on-surface-variant text-sm mb-md">Your consistent on-time payments have qualified you for a higher limit.</p>
+<button class="w-full h-14 bg-primary-fixed text-on-primary-fixed font-bold rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                Apply for ₱15,000
+                <span class="material-symbols-outlined">trending_up</span>
+</button>
+</div>
+</main>
+<!-- Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container dark:bg-surface-container rounded-t-xl shadow-md border-t border-outline-variant">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-caps text-label-caps mt-1">Schedule</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim transition-colors px-4 py-1.5">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-label-caps text-label-caps mt-1">Rewards</span>
+</button>
+<!-- Active: Profile (Since History is a subset of Profile/Account) -->
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container rounded-xl px-4 py-1.5">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</button>
+</nav>
+<script>
+        // Simple entry animation for loan cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.loan-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * (index + 1));
+            });
+        });
+    </script>
+</body></html>

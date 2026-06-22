@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Loyalty &amp; Rebates | LendingPro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#1e1f26",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "secondary-fixed": "#e5e2e1",
+                      "on-secondary": "#313030",
+                      "on-surface-variant": "#c4c9ac",
+                      "secondary-container": "#4a4949",
+                      "tertiary": "#ffffff",
+                      "on-secondary-container": "#bab8b7",
+                      "surface-container-low": "#1a1b22",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "surface-bright": "#383940",
+                      "on-primary-container": "#556d00",
+                      "surface-container-high": "#282a31",
+                      "inverse-on-surface": "#2f3037",
+                      "primary-container": "#c3f400",
+                      "error-container": "#93000a",
+                      "on-tertiary": "#303030",
+                      "primary": "#ffffff",
+                      "inverse-primary": "#506600",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-primary-fixed": "#161e00",
+                      "error": "#ffb4ab",
+                      "on-primary": "#283500",
+                      "surface-dim": "#12131a",
+                      "on-tertiary-container": "#656464",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "primary-fixed": "#c3f400",
+                      "surface-tint": "#abd600",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-highest": "#33343c",
+                      "surface": "#12131a",
+                      "inverse-surface": "#e2e1eb",
+                      "outline-variant": "#444933",
+                      "on-surface": "#e2e1eb",
+                      "on-error": "#690005",
+                      "on-background": "#e2e1eb",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "primary-fixed-dim": "#abd600",
+                      "surface-variant": "#33343c",
+                      "tertiary-container": "#e5e2e1",
+                      "background": "#12131a",
+                      "on-primary-fixed-variant": "#3c4d00",
+                      "on-tertiary-fixed": "#1b1b1c",
+                      "secondary": "#c8c6c5",
+                      "outline": "#8e9379",
+                      "on-secondary-fixed-variant": "#474646",
+                      "surface-container-lowest": "#0c0e14"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin": "32px",
+                      "topbar_height": "64px",
+                      "gutter": "24px",
+                      "sidebar_width": "280px",
+                      "base_unit": "4px"
+              },
+              "fontFamily": {
+                      "data-table": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "title-sm": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-caps": ["Inter"]
+              },
+              "fontSize": {
+                      "data-table": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #12131a;
+            color: #e2e1eb;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #c3f400 !important;
+        }
+        .tier-card {
+            border: 1px solid #2D2D2D;
+            background-color: #1e1f26;
+            transition: background-color 0.2s;
+        }
+        .tier-card:hover {
+            background-color: #25252b;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container border-r border-outline-variant flex flex-col py-4 z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">LendingPro</h1>
+<p class="font-body-sm text-body-sm text-secondary-fixed-dim">Enterprise Admin</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto scrollbar-hide">
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-body-md text-body-md">Borrowers</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">payments</span>
+<span class="font-body-md text-body-md">Loans</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">account_balance_wallet</span>
+<span class="font-body-md text-body-md">Collections</span>
+</a>
+<a class="flex items-center px-6 py-3 border-l-2 border-primary-fixed bg-surface-container-high text-primary font-bold transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">card_giftcard</span>
+<span class="font-body-md text-body-md">Loyalty &amp; Rebates</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed hover:bg-surface-container-highest transition-colors duration-200 cursor-pointer active:opacity-80" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto space-y-2 border-t border-outline-variant pt-4">
+<button class="w-full bg-surface-container-highest py-2 text-primary font-bold text-body-md flex items-center justify-center gap-2 hover:bg-surface-bright transition-all">
+<span class="material-symbols-outlined">help</span> Support
+            </button>
+<div class="flex flex-col gap-1">
+<a class="flex items-center py-2 text-secondary-fixed-dim hover:text-primary" href="#">
+<span class="material-symbols-outlined mr-3">account_circle</span>
+<span class="font-body-md text-body-md">Profile</span>
+</a>
+<a class="flex items-center py-2 text-secondary-fixed-dim hover:text-primary" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="h-[64px] bg-surface border-b border-outline-variant flex justify-between items-center px-margin sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-surface-container-low border border-outline-variant px-3 py-1.5 focus-within:border-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-secondary-fixed-dim mr-2 text-[20px]">search</span>
+<input class="bg-transparent border-none p-0 text-body-md text-primary w-64 placeholder-secondary-fixed-dim focus:ring-0" placeholder="Search parameters..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-4">
+<span class="font-label-caps text-label-caps text-secondary-fixed-dim">Loyalty &amp; Rebates</span>
+<span class="text-secondary-fixed-dim">/</span>
+<span class="font-label-caps text-label-caps text-primary font-bold">Settings &amp; Approvals</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-secondary-fixed-dim hover:text-primary transition-all">notifications</button>
+<button class="bg-primary-container text-on-primary-container font-bold px-4 py-2 text-body-md transition-all hover:opacity-90">+ New Loan</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a high-level fintech administrator, looking confident with a minimalist, tech-focused background featuring subtle blue and lime green glowing light elements. The overall aesthetic is dark, modern, and high-performance, fitting for a B2B financial dashboard user interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdg8EPmoiXGiOONf2b5q0eR8D8Ybu6M7e1cuqCS5lTBnTxKsJstPbA9zPHNxS9pPhert7VzLDo30bvkFMav-EUWRF7Ij05q7QI8nJicJPu_E4zrs02olYi56ef3__dTHgCZsWVbza_iPk6g39z2XC1T0vttFEKHDpnwEkWxnJnsBp3cD9xTmDv8VUsCvu0DcGOB3j6w4KEK2yWhnUdIkuaWA6xp16clqt3DIcfq8eBeaNUvlxwUXgmjoW1OrlVK_11qiCReIGjmWZ8"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="p-margin space-y-8 max-w-[1440px]">
+<!-- Hero Header -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Loyalty Configuration</h2>
+<p class="text-secondary-fixed-dim font-body-md mt-1">Manage borrower tiering logic and automated rebate distributions.</p>
+</div>
+<div class="flex gap-3">
+<button class="border border-outline px-6 py-2 text-primary font-bold hover:bg-surface-container-low transition-all">Export Rules</button>
+<button class="bg-primary-fixed text-on-primary-fixed px-6 py-2 font-bold hover:bg-primary-fixed-dim transition-all">Save Changes</button>
+</div>
+</section>
+<!-- Tier Rules Section -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Standard Tier -->
+<div class="tier-card p-6 flex flex-col justify-between min-h-[220px]">
+<div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-title-sm text-primary">Standard</h3>
+<span class="bg-surface-container-highest px-2 py-0.5 text-label-caps font-label-caps text-secondary-fixed-dim uppercase">Default</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">MISSED-DAY TOLERANCE</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" type="number" value="3"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">Days</span>
+</div>
+</div>
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">CEILING MULTIPLIER</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" step="0.1" type="number" value="1.0"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">x</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trusted Tier -->
+<div class="tier-card p-6 flex flex-col justify-between min-h-[220px] border-primary-fixed-dim/30">
+<div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-title-sm text-primary">Trusted</h3>
+<span class="bg-primary-fixed text-on-primary-fixed px-2 py-0.5 text-label-caps font-label-caps uppercase">High Performance</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">MISSED-DAY TOLERANCE</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" type="number" value="7"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">Days</span>
+</div>
+</div>
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">CEILING MULTIPLIER</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" step="0.1" type="number" value="1.5"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">x</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Preferred Tier -->
+<div class="tier-card p-6 flex flex-col justify-between min-h-[220px] border-primary-fixed">
+<div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-sm text-title-sm text-primary">Preferred</h3>
+<span class="bg-primary text-on-primary px-2 py-0.5 text-label-caps font-label-caps uppercase">VIP Status</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">MISSED-DAY TOLERANCE</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" type="number" value="14"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">Days</span>
+</div>
+</div>
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-1">CEILING MULTIPLIER</label>
+<div class="relative">
+<input class="w-full bg-surface-dim border border-outline-variant px-3 py-2 text-body-md text-primary" step="0.1" type="number" value="2.5"/>
+<span class="absolute right-3 top-2 text-secondary-fixed-dim text-body-sm">x</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Rebate Rules & Table Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Rebate Rules Card -->
+<div class="xl:col-span-4 h-full">
+<div class="bg-surface-container border border-outline-variant p-6 h-full flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary-fixed">percent</span>
+<h3 class="font-title-sm text-title-sm text-primary">Rebate Rules</h3>
+</div>
+<div class="space-y-6 flex-1">
+<div>
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-2 uppercase">Base Rebate Percentage</label>
+<div class="flex items-center gap-4">
+<input class="flex-1 accent-primary-fixed" max="5" min="0" oninput="this.nextElementSibling.value = this.value + '%'" step="0.5" type="range" value="1.5"/>
+<output class="w-12 text-body-md font-bold text-primary-fixed text-right">1.5%</output>
+</div>
+<p class="text-body-sm text-secondary-fixed-dim mt-2">Applied to total interest paid upon loan completion.</p>
+</div>
+<div class="pt-4 border-t border-outline-variant">
+<label class="text-label-caps font-label-caps text-secondary-fixed-dim block mb-2 uppercase">Payout Mode</label>
+<select class="w-full bg-surface-dim border border-outline-variant px-3 py-3 text-body-md text-primary appearance-none cursor-pointer">
+<option value="credit">Credit (Wallet Deposit)</option>
+<option selected="" value="cash">Cash (Direct Bank Transfer)</option>
+<option value="offset">Offset (Future Interest)</option>
+</select>
+</div>
+<div class="bg-surface-dim border-l-2 border-primary-fixed p-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-fixed text-sm">info</span>
+<p class="text-body-sm text-secondary-fixed-dim leading-relaxed">
+                                        Manual approval is required for all rebates exceeding ₱1,000. System will auto-hold transactions flagged for verification.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pending Approvals Table -->
+<div class="xl:col-span-8">
+<div class="bg-surface-container border border-outline-variant flex flex-col h-full">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-sm text-title-sm text-primary">Pending Rebate Approvals</h3>
+<span class="text-body-sm text-secondary-fixed-dim">3 pending requests</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider">Borrower</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider">Loan Reference</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider">Amount</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-secondary-fixed-dim uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-data-table text-data-table divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-highest transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-bright flex items-center justify-center text-primary-fixed-dim font-bold text-[12px]">SJ</div>
+<span class="text-primary font-bold">Sarah Jenkins</span>
+</div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">L-90210-24X</td>
+<td class="px-6 py-4 text-primary font-bold">₱500.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary-fixed text-on-primary-fixed px-3 py-1.5 font-bold hover:opacity-90 active:opacity-80 transition-all">Approve</button>
+<button class="border border-outline text-primary px-3 py-1.5 font-bold hover:bg-surface-container-low transition-all">Reject</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-bright flex items-center justify-center text-primary-fixed-dim font-bold text-[12px]">MA</div>
+<span class="text-primary font-bold">Marcus Aurelius</span>
+</div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">L-11821-24B</td>
+<td class="px-6 py-4 text-primary font-bold">₱1,250.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary-fixed text-on-primary-fixed px-3 py-1.5 font-bold hover:opacity-90 active:opacity-80 transition-all">Approve</button>
+<button class="border border-outline text-primary px-3 py-1.5 font-bold hover:bg-surface-container-low transition-all">Reject</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-highest transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-bright flex items-center justify-center text-primary-fixed-dim font-bold text-[12px]">LL</div>
+<span class="text-primary font-bold">Linda Lovelace</span>
+</div>
+</td>
+<td class="px-6 py-4 text-secondary-fixed-dim">L-33445-24K</td>
+<td class="px-6 py-4 text-primary font-bold">₱75.00</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="bg-primary-fixed text-on-primary-fixed px-3 py-1.5 font-bold hover:opacity-90 active:opacity-80 transition-all">Approve</button>
+<button class="border border-outline text-primary px-3 py-1.5 font-bold hover:bg-surface-container-low transition-all">Reject</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-auto p-6 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<span class="text-body-sm text-secondary-fixed-dim uppercase font-bold tracking-tight">System Status: Real-time calculation active</span>
+<button class="text-primary-fixed hover:underline text-body-sm font-bold flex items-center gap-1">
+                                View Approval History <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Decorative Element (Atmospheric Gradient) -->
+<div class="fixed bottom-0 right-0 w-[600px] h-[600px] pointer-events-none -z-10 opacity-20 overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tl from-primary-fixed/20 to-transparent blur-[120px] translate-x-1/2 translate-y-1/2 rounded-full"></div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if(this.innerText === 'Approve') {
+                    const row = this.closest('tr');
+                    row.style.transition = 'all 0.5s ease';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+                    setTimeout(() => row.remove(), 500);
+                }
+            });
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('border-primary-fixed');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('border-primary-fixed');
+        });
+    </script>
+</body></html>
