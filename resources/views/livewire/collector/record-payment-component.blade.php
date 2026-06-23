@@ -1,4 +1,4 @@
-<div class="pt-2 pb-36">
+<div class="pt-2 pb-48">
 
     @php
         $b    = $this->borrower;
@@ -79,17 +79,17 @@
         <div class="flex gap-3 mt-stack-md">
             <button
                 wire:click="setExact"
-                class="flex-1 h-[52px] bg-surface-container-high rounded-xl font-semibold text-[13px] text-on-surface border border-white/8 active:bg-surface-variant active:scale-95 transition-all">
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
                 Exact
             </button>
             <button
                 wire:click="setPartial"
-                class="flex-1 h-[52px] bg-surface-container-high rounded-xl font-semibold text-[13px] text-on-surface border border-white/8 active:bg-surface-variant active:scale-95 transition-all">
-                Partial&nbsp;(50%)
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
+                Partial (50%)
             </button>
             <button
                 wire:click="clearAmount"
-                class="flex-1 h-[52px] bg-surface-container-high rounded-xl font-semibold text-[13px] text-on-surface border border-white/8 active:bg-surface-variant active:scale-95 transition-all">
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
                 Custom
             </button>
         </div>
@@ -136,9 +136,10 @@
     @endif
 
     <!-- ── Fixed Confirm Button ───────────────────────────────────── -->
+    {{-- Tab bar is h-[80px]; sit directly on top of it --}}
     @if($b && $loan)
-    <div class="fixed bottom-[72px] left-0 w-full px-margin-mobile pb-safe z-40">
-        <div class="bg-background/70 backdrop-blur-lg pt-4 pb-2 -mx-margin-mobile px-margin-mobile border-t border-white/5">
+    <div class="fixed bottom-[80px] left-0 w-full z-[49]">
+        <div class="bg-background/80 backdrop-blur-lg px-4 pt-3 pb-3 border-t border-white/5">
             <button
                 wire:click="confirm"
                 wire:loading.attr="disabled"

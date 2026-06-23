@@ -31,6 +31,7 @@ class TodayRouteComponent extends Component
             ->get()
             ->map(fn ($item) => [
                 'name'       => $item->loan->borrower->full_name ?? 'Unknown',
+                'address'    => $item->loan->borrower->address ?? '',
                 'loan_id'    => $item->loan_id,
                 'amount_due' => $item->amount_due,
                 'status'     => $item->status,
@@ -38,6 +39,24 @@ class TodayRouteComponent extends Component
                 'paid_at'    => $item->loan?->payments()->latest('collected_at')->value('collected_at')?->format('h:i A'),
                 'href'       => route('collector.borrower', $item->loan->borrower_id ?? $item->loan_id),
             ]);
+    }
+
+    public function getMapUrlProperty(): string
+    {
+        $addresses = $this->borrowers
+            ->pluck('address')
+            ->filter()
+            ->values();
+
+        if ($addresses->isEmpty()) {
+            return 'https://www.google.com/maps';
+        }
+
+        if ($addresses->count() === 1) {
+            return 'https://www.google.com/maps/search/?api=1&query=' . urlencode($addresses->first());
+        }
+
+        return 'https://www.google.com/maps/dir/' . $addresses->map(fn ($a) => urlencode($a))->join('/');
     }
 
     public function getSummaryProperty(): array
