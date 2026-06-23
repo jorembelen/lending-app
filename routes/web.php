@@ -40,7 +40,8 @@ Route::group(['prefix'=>'2fa'], function(){
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth', '2fa', 'reset']], function () {
+Route::group(['middleware' => ['auth', 'reset']], function () {
+// Route::group(['middleware' => ['auth', '2fa', 'reset']], function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
