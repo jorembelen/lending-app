@@ -15,6 +15,19 @@
   box-sizing: border-box;
 }
 
+/* Preflight is disabled (see note above), so bare <button> elements keep the
+   browser's light "buttonface" background. In our dark theme that renders the
+   near-white button text on light-grey = unreadable (e.g. the borrower search
+   result dropdowns). Restore preflight's transparent default so our bg-*
+   utility classes remain the single source of truth for button backgrounds. */
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  background-color: transparent;
+  background-image: none;
+}
+
 /* Material Symbols display fix */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
