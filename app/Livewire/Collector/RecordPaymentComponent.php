@@ -5,6 +5,7 @@ namespace App\Livewire\Collector;
 use App\Models\Borrower;
 use App\Models\Loan;
 use App\Models\Payment;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class RecordPaymentComponent extends Component
@@ -19,7 +20,7 @@ class RecordPaymentComponent extends Component
         $this->borrowerId = $borrowerId;
         $loan = $this->loan;
         if ($loan) {
-            $this->exactAmount = (float) ($loan->daily_payment ?? $loan->amount_due ?? 0);
+            $this->exactAmount = (float) $loan->daily_installment;
             $this->amount      = $this->exactAmount;
         }
     }
@@ -32,7 +33,7 @@ class RecordPaymentComponent extends Component
     public function getLoanProperty(): ?Loan
     {
         return Loan::where('borrower_id', $this->borrowerId)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'overdue'])
             ->orderByDesc('created_at')
             ->first();
     }
@@ -55,7 +56,7 @@ class RecordPaymentComponent extends Component
     public function getNewBalanceProperty(): float
     {
         if (! $this->loan) { return 0.0; }
-        return max(0, (float) ($this->loan->remaining_balance ?? 0) - $this->amount);
+        return max(0, (float) $this->loan->remaining_balance - $this->amount);
     }
 
     public function confirm(): void
@@ -65,14 +66,13 @@ class RecordPaymentComponent extends Component
         ]);
 
         $payment = Payment::create([
-            'loan_id'     => $this->loan->id,
-            'borrower_id' => $this->borrowerId,
-            'amount'      => $this->amount,
-            'notes'       => $this->notes,
+            'loan_id'           => $this->loan->id,
             'collector_user_id' => auth()->id(),
+            'amount'            => $this->amount,
             'collected_at'      => now(),
             'recorded_at'       => now(),
-            'idempotency_key'   => \Illuminate\Support\Str::uuid()->toString(),
+            'idempotency_key'   => Str::uuid()->toString(),
+            'is_voided'         => false,
         ]);
 
         $this->redirect(route('collector.payment.confirmed', $payment->id), navigate: true);
