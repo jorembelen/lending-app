@@ -4,35 +4,51 @@ namespace App\Livewire\Collector;
 
 use App\Models\Payment;
 use App\Models\ScheduleItem;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class EndOfDaySummaryComponent extends Component
 {
+    /**
+     * Today's route = schedule items due today on active loans.
+     * All figures below derive from this same set so the screen is internally
+     * consistent and tracks the real records.
+     */
+    public function getRouteItemsProperty(): Collection
+    {
+        return ScheduleItem::with('loan.borrower')
+            ->whereHas('loan', fn ($q) => $q->where('status', 'active'))
+            ->whereDate('due_date', today())
+            ->get();
+    }
+
     public function getSummaryProperty(): array
     {
-        $collectorId    = auth()->id();
-        $totalCollected = Payment::where('collector_user_id', $collectorId)
-            ->whereDate('collected_at', today())->sum('amount');
+        $items = $this->routeItems;
 
-        $assigned  = ScheduleItem::whereDate('due_date', today())->count();
-        $completed = Payment::where('collector_user_id', $collectorId)
-            ->whereDate('collected_at', today())->count();
-        $missed    = max(0, $assigned - $completed);
+        $assigned  = $items->count();
+        $completed = $items->whereIn('status', ['paid', 'partially_paid'])->count();
+        $missed    = $assigned - $completed;
+
+        // Real money collected today by this collector (valid payments only).
+        $totalCollected = (float) Payment::where('collector_user_id', auth()->id())
+            ->where('is_voided', false)
+            ->whereDate('collected_at', today())
+            ->sum('amount');
+
         $efficiency = $assigned > 0 ? round(($completed / $assigned) * 100, 1) : 0;
 
         return compact('totalCollected', 'assigned', 'completed', 'missed', 'efficiency');
     }
 
-    public function getMissedProperty()
+    /**
+     * Stops on today's route that were not fully collected.
+     */
+    public function getMissedProperty(): Collection
     {
-        $collectorId = auth()->id();
-        $paidLoanIds = Payment::where('collector_user_id', $collectorId)
-            ->whereDate('collected_at', today())->pluck('loan_id');
-
-        return ScheduleItem::with('loan.borrower')
-            ->whereDate('due_date', today())
-            ->whereNotIn('loan_id', $paidLoanIds)
-            ->get();
+        return $this->routeItems
+            ->whereIn('status', ['pending', 'missed'])
+            ->values();
     }
 
     public function render()

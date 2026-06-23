@@ -43,19 +43,25 @@
         </div>
 
         <div class="bg-surface-container rounded-xl border border-white/10 overflow-hidden divide-y divide-white/5">
-            @foreach($this->missed as $loan)
-            <div class="p-4 flex items-center justify-between active:bg-surface-variant transition-colors">
+            @foreach($this->missed as $item)
+            @php $borrower = $item->loan?->borrower; @endphp
+            <a href="{{ route('collector.payment', $item->loan?->borrower_id ?? $item->loan_id) }}"
+               class="p-4 flex items-center justify-between active:bg-surface-variant transition-colors">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
                         <span class="material-symbols-outlined text-on-surface-variant">person</span>
                     </div>
                     <div>
-                        <p class="font-label-md text-label-md text-primary">{{ $loan->borrower?->name ?? 'Unknown' }}</p>
-                        <p class="font-label-sm text-label-sm text-on-surface-variant">ID: #{{ $loan->loan_id }} • {{ $loan->borrower?->address ?? '' }}</p>
+                        <p class="font-label-md text-label-md text-primary">{{ $borrower?->full_name ?? 'Unknown' }}</p>
+                        <p class="font-label-sm text-label-sm text-on-surface-variant">
+                            {{ $borrower?->borrower_code ?? ('#' . $item->loan_id) }} • {{ $borrower?->address ?? '' }}
+                        </p>
                     </div>
                 </div>
-                <span class="font-headline-md text-headline-md text-error">₱{{ number_format($loan->daily_payment ?? 0, 2) }}</span>
-            </div>
+                <span class="font-headline-md text-headline-md text-error">
+                    ₱{{ number_format((float) $item->amount_due - (float) $item->amount_paid, 2) }}
+                </span>
+            </a>
             @endforeach
         </div>
     </section>

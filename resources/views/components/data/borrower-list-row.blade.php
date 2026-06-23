@@ -12,11 +12,13 @@ $amountDue  = $borrower['amount_due'] ?? $borrower->amount_due ?? 0;
 $avatar     = $borrower['avatar'] ?? $borrower->avatar ?? null;
 
 $statusIcon = match($status) {
-    'paid'    => ['icon' => 'check_circle', 'color' => 'text-primary-fixed'],
-    'overdue' => ['icon' => 'pending',      'color' => 'text-yellow-500'],
-    default   => null,
+    'paid'           => ['icon' => 'check_circle', 'color' => 'text-primary-fixed'],
+    'partially_paid' => ['icon' => 'pie_chart',    'color' => 'text-yellow-400'],
+    'missed'         => ['icon' => 'error',         'color' => 'text-error'],
+    default          => null,
 };
 
+$statusLabel = ucwords(str_replace('_', ' ', $status));
 $amountClass = $status === 'paid' ? 'text-primary-fixed/60' : 'text-primary-fixed';
 @endphp
 
@@ -44,7 +46,7 @@ $amountClass = $status === 'paid' ? 'text-primary-fixed/60' : 'text-primary-fixe
                     <span class="w-2 h-2 rounded-full bg-on-surface-variant/30"></span>
                 </div>
             @endif
-            <x-ui.badge :variant="$status">{{ ucfirst($status) }}</x-ui.badge>
+            <x-ui.badge :variant="$status">{{ $statusLabel }}</x-ui.badge>
         </div>
     </div>
 

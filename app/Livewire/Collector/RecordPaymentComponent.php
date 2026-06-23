@@ -72,17 +72,60 @@ class RecordPaymentComponent extends Component
             return;
         }
 
-        $payment = Payment::create([
-            'loan_id'           => $loan->id,
-            'collector_user_id' => auth()->id(),
-            'amount'            => $this->amount,
-            'collected_at'      => now(),
-            'recorded_at'       => now(),
-            'idempotency_key'   => Str::uuid()->toString(),
-            'is_voided'         => false,
-        ]);
+        $payment = \Illuminate\Support\Facades\DB::transaction(function () use ($loan) {
+            $payment = Payment::create([
+                'loan_id'           => $loan->id,
+                'collector_user_id' => auth()->id(),
+                'amount'            => $this->amount,
+                'collected_at'      => now(),
+                'recorded_at'       => now(),
+                'idempotency_key'   => Str::uuid()->toString(),
+                'is_voided'         => false,
+            ]);
+
+            $this->allocateToSchedule($loan, (float) $this->amount);
+
+            return $payment;
+        });
 
         $this->redirect(route('collector.payment.confirmed', $payment->id), navigate: true);
+    }
+
+    /**
+     * Apply a payment across the loan's unpaid schedule items in due order (FIFO),
+     * updating each item's amount_paid and status so the route and summaries
+     * always reflect real collections.
+     */
+    private function allocateToSchedule(Loan $loan, float $amount): void
+    {
+        $remaining = $amount;
+
+        $items = $loan->scheduleItems()
+            ->whereIn('status', ['pending', 'partially_paid', 'missed'])
+            ->orderBy('due_date')
+            ->orderBy('sequence_number')
+            ->get();
+
+        foreach ($items as $item) {
+            if ($remaining <= 0) {
+                break;
+            }
+
+            $owed = (float) $item->amount_due - (float) $item->amount_paid;
+            if ($owed <= 0) {
+                continue;
+            }
+
+            $applied  = min($remaining, $owed);
+            $newPaid  = (float) $item->amount_paid + $applied;
+
+            $item->update([
+                'amount_paid' => $newPaid,
+                'status'      => $newPaid >= (float) $item->amount_due ? 'paid' : 'partially_paid',
+            ]);
+
+            $remaining -= $applied;
+        }
     }
 
     public function render()
