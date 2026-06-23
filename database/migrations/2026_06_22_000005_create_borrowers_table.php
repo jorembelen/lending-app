@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('phone_number');
             $table->text('address')->nullable();
+            $table->string('borrower_code')->unique()->nullable();
             $table->string('qr_reference')->unique();
             $table->string('photo_path')->nullable();
             $table->foreignId('current_tier_id')

@@ -31,15 +31,15 @@ class BorrowerDetailComponent extends Component
     {
         if (! $this->loan) { return collect(); }
 
-        return $this->loan->payments()
+        return $this->loan->scheduleItems()
             ->orderBy('due_date')
             ->get()
-            ->map(fn ($p) => [
-                'due_date'       => $p->due_date,
-                'amount'         => $p->amount,
-                'status'         => $p->status,
-                'installment_no' => $p->installment_no ?? null,
-                'method'         => $p->payment_method ?? null,
+            ->map(fn ($item) => [
+                'due_date'       => $item->due_date,
+                'amount'         => $item->amount_due,
+                'status'         => $item->status,
+                'installment_no' => $item->sequence_number ?? null,
+                'method'         => null,
             ]);
     }
 

@@ -2,13 +2,13 @@
 
 namespace App\Livewire\Collector;
 
-use App\Models\Loan;
+use App\Models\ScheduleItem;
 use Livewire\Component;
 
 class TodayRouteComponent extends Component
 {
-    public string $search     = '';
-    public string $filter     = 'all';  // all | pending | overdue | paid
+    public string $search  = '';
+    public string $filter  = 'all';  // all | pending | overdue | paid
 
     public function setFilter(string $filter): void
     {
@@ -17,32 +17,25 @@ class TodayRouteComponent extends Component
 
     public function getBorrowersProperty()
     {
-        $collectorId = auth()->id();
-
-        // Fallback to seeded data if no real loans exist yet
-        $query = Loan::with('borrower')
-            ->whereHas('borrower', fn ($q) =>
-                $q->where('collector_id', $collectorId)
-                  ->when($this->search, fn ($q) =>
-                      $q->where('name', 'like', "%{$this->search}%")
-                        ->orWhere('borrower_id', 'like', "%{$this->search}%")
-                  )
+        return ScheduleItem::with(['loan.borrower'])
+            ->whereDate('due_date', today())
+            ->whereHas('loan', fn ($q) => $q->where('status', 'active'))
+            ->when($this->filter !== 'all', fn ($q) => $q->where('status', $this->filter))
+            ->when($this->search, fn ($q) =>
+                $q->whereHas('loan.borrower', fn ($q) =>
+                    $q->where('full_name', 'like', "%{$this->search}%")
+                )
             )
-            ->whereDate('due_date', today());
-
-        if ($this->filter !== 'all') {
-            $query->where('status', $this->filter);
-        }
-
-        return $query->get()->map(fn ($loan) => [
-            'name'      => $loan->borrower->name ?? 'Unknown',
-            'loan_id'   => $loan->loan_id ?? $loan->id,
-            'amount_due'=> $loan->amount_due ?? $loan->daily_payment ?? 0,
-            'status'    => $loan->status ?? 'pending',
-            'avatar'    => $loan->borrower->avatar ?? null,
-            'paid_at'   => $loan->payments()->latest('collected_at')->value('collected_at')?->format('h:i A') ?? null,
-            'href'      => route('collector.borrower', $loan->borrower_id ?? $loan->id),
-        ]);
+            ->get()
+            ->map(fn ($item) => [
+                'name'       => $item->loan->borrower->full_name ?? 'Unknown',
+                'loan_id'    => $item->loan_id,
+                'amount_due' => $item->amount_due,
+                'status'     => $item->status,
+                'avatar'     => null,
+                'paid_at'    => $item->loan?->payments()->latest('collected_at')->value('collected_at')?->format('h:i A'),
+                'href'       => route('collector.borrower', $item->loan->borrower_id ?? $item->loan_id),
+            ]);
     }
 
     public function getSummaryProperty(): array

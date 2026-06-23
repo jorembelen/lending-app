@@ -9,7 +9,7 @@ class RewardsComponent extends Component
 {
     public function getTiersProperty()
     {
-        return LoyaltyTier::orderBy('min_points')->get();
+        return LoyaltyTier::orderBy('rank')->get();
     }
 
     public function getBorrowerProperty()

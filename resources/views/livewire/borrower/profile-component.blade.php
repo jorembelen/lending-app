@@ -23,7 +23,7 @@
                 ['person', 'Full Name',    $user->name     ?? '—'],
                 ['phone',  'Phone Number', $user->phone    ?? '—'],
                 ['mail',   'Email',        $user->email    ?? '—'],
-                ['badge',  'Borrower ID',  str_pad($user->id ?? 0, 6, '0', STR_PAD_LEFT)],
+                ['badge',  'Borrower ID',  \App\Models\Borrower::find($user->id)?->borrower_code ?? ('BRW-' . str_pad($user->id ?? 0, 6, '0', STR_PAD_LEFT))],
             ] as [$icon, $label, $value])
             <div class="flex items-center gap-4 px-5 py-4">
                 <span class="material-symbols-outlined text-on-surface-variant text-[20px]">{{ $icon }}</span>

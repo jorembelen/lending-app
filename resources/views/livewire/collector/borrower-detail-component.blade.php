@@ -68,7 +68,7 @@
                         {{ $entry['status'] === 'paid' ? 'bg-primary-fixed/20' : ($entry['status'] === 'overdue' ? 'bg-error/20' : 'bg-surface-variant') }}">
                         <span class="material-symbols-outlined text-[20px]
                             {{ $entry['status'] === 'paid' ? 'text-primary-fixed' : ($entry['status'] === 'overdue' ? 'text-error' : 'text-on-surface-variant') }}"
-                            style="{{ $entry['status'] === 'paid' ? \"font-variation-settings: 'FILL' 1\" : '' }}">
+                            @if($entry['status'] === 'paid') style="font-variation-settings: 'FILL' 1" @endif>
                             {{ $entry['status'] === 'paid' ? 'check_circle' : ($entry['status'] === 'overdue' ? 'warning' : 'schedule') }}
                         </span>
                     </div>
@@ -91,15 +91,15 @@
     @endif
 
     @endif
-</div>
 
-<!-- Fixed Scan CTA -->
-@if($this->borrower && $this->loan)
-<div class="fixed bottom-[80px] left-0 w-full px-margin-mobile pb-3 bg-gradient-to-t from-background via-background/90 to-transparent z-40">
-    <a href="{{ route('collector.scan', ['borrower' => $borrowerId]) }}"
-       class="w-full h-14 bg-primary-fixed text-on-primary-fixed rounded-xl flex items-center justify-center gap-3 font-label-md text-label-md font-bold active:scale-95 transition-all shadow-lg shadow-primary-fixed/20">
-        <span class="material-symbols-outlined">qr_code_scanner</span>
-        Scan QR to Collect Payment
-    </a>
+    <!-- Fixed Scan CTA -->
+    @if($this->borrower && $this->loan)
+    <div class="fixed bottom-[80px] left-0 w-full px-margin-mobile pb-3 bg-gradient-to-t from-background via-background/90 to-transparent z-40">
+        <a href="{{ route('collector.scan', ['borrower' => $borrowerId]) }}"
+           class="w-full h-14 bg-primary-fixed text-on-primary-fixed rounded-xl flex items-center justify-center gap-3 font-label-md text-label-md font-bold active:scale-95 transition-all shadow-lg shadow-primary-fixed/20">
+            <span class="material-symbols-outlined">qr_code_scanner</span>
+            Scan QR to Collect Payment
+        </a>
+    </div>
+    @endif
 </div>
-@endif

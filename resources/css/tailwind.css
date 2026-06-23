@@ -5,6 +5,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Preflight is disabled in tailwind.config.js to avoid fighting Bootstrap during
+   migration, but that also drops the global border-box reset. Without it, w-full
+   inputs/buttons add their padding ON TOP of 100% width and overflow their card.
+   Bootstrap's Reboot sets the same rule, so this is safe to restore globally. */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
 /* Material Symbols display fix */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';

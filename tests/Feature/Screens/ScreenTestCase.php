@@ -4,7 +4,6 @@ namespace Tests\Feature\Screens;
 
 use App\Models\Borrower;
 use App\Models\BorrowerAccount;
-use App\Models\HolidayCalendar;
 use App\Models\Loan;
 use App\Models\LoyaltyTier;
 use App\Models\Payment;
@@ -24,12 +23,12 @@ abstract class ScreenTestCase extends TestCase
 {
     use RefreshDatabase;
 
-    protected User $admin;
-    protected User $staff;
-    protected User $collector;
+    protected User     $admin;
+    protected User     $collector;
+    protected User     $borrowerUser;
     protected Borrower $borrower;
-    protected Loan $loan;
-    protected LoyaltyTier $standardTier;
+    protected Loan     $loan;
+    protected Payment  $payment;
     protected RatePreset $preset;
 
     protected function setUp(): void
@@ -42,18 +41,21 @@ abstract class ScreenTestCase extends TestCase
 
     private function seedRoles(): void
     {
-        foreach (['super admin', 'admin', 'staff', 'collector', 'user'] as $role) {
+        foreach (['super admin', 'admin', 'staff', 'collector', 'borrower', 'user'] as $role) {
             Role::firstOrCreate(['name' => $role, 'guard_name' => 'web']);
         }
 
-        $this->admin = User::factory()->create(['name' => 'Test Admin', 'username' => 'test.admin', 'status' => 1]);
+        $this->admin = User::factory()->create(['name' => 'Test Admin', 'status' => 1]);
         $this->admin->assignRole('admin');
 
-        $this->staff = User::factory()->create(['name' => 'Test Staff', 'username' => 'test.staff', 'status' => 1]);
-        $this->staff->assignRole('staff');
+        $staff = User::factory()->create(['name' => 'Test Staff', 'status' => 1]);
+        $staff->assignRole('staff');
 
-        $this->collector = User::factory()->create(['name' => 'Test Collector', 'username' => 'test.collector', 'status' => 1]);
+        $this->collector = User::factory()->create(['name' => 'Test Collector', 'status' => 1]);
         $this->collector->assignRole('collector');
+
+        $this->borrowerUser = User::factory()->create(['name' => 'Test Borrower User', 'status' => 1]);
+        $this->borrowerUser->assignRole('borrower');
     }
 
     private function seedSettings(): void
@@ -64,7 +66,7 @@ abstract class ScreenTestCase extends TestCase
 
     private function seedBaseData(): void
     {
-        $this->standardTier = LoyaltyTier::create([
+        $standardTier = LoyaltyTier::create([
             'name'                       => 'Standard',
             'rank'                       => 1,
             'max_missed_days_to_qualify' => 999,
@@ -73,7 +75,7 @@ abstract class ScreenTestCase extends TestCase
             'priority_reloan'            => false,
         ]);
 
-        $trustedTier = LoyaltyTier::create([
+        LoyaltyTier::create([
             'name'                       => 'Trusted',
             'rank'                       => 2,
             'max_missed_days_to_qualify' => 5,
@@ -90,41 +92,32 @@ abstract class ScreenTestCase extends TestCase
             'is_active'     => true,
         ]);
 
-        RebateRule::create([
-            'loyalty_tier_id'           => null,
-            'percent_of_interest'       => 5.00,
+        $rebateRule = RebateRule::create([
+            'loyalty_tier_id'            => null,
+            'percent_of_interest'        => 5.00,
             'max_missed_days_to_qualify' => 5,
-            'default_application'       => 'credit_next_loan',
-            'is_active'                 => true,
-        ]);
-
-        RebateRule::create([
-            'loyalty_tier_id'           => $trustedTier->id,
-            'percent_of_interest'       => 8.00,
-            'max_missed_days_to_qualify' => 5,
-            'default_application'       => 'credit_next_loan',
-            'is_active'                 => true,
+            'default_application'        => 'credit_next_loan',
+            'is_active'                  => true,
         ]);
 
         $this->borrower = Borrower::create([
-            'full_name'    => 'Juan dela Cruz',
-            'phone_number' => '09171234567',
-            'address'      => 'Barangay 1, Quezon City',
-            'qr_reference' => Str::uuid(),
-            'current_tier_id' => $this->standardTier->id,
+            'full_name'       => 'Juan dela Cruz',
+            'phone_number'    => '09171234567',
+            'address'         => 'Barangay 1, Quezon City',
+            'qr_reference'    => Str::uuid(),
+            'current_tier_id' => $standardTier->id,
         ]);
 
         BorrowerAccount::create([
             'borrower_id'        => $this->borrower->id,
             'email'              => 'juan@test.local',
             'pin_hash'           => bcrypt('1234'),
-            'created_by_user_id' => $this->staff->id,
+            'created_by_user_id' => $this->admin->id,
         ]);
 
-        // Active loan with 3 paid schedule items
-        $disbursedAt = Carbon::now()->subDays(10);
-        $daily = round((5000 / 1000) * 20, 2);
-        $this->loan = Loan::create([
+        $disbursedAt   = Carbon::now()->subDays(10);
+        $daily         = round((5000 / 1000) * 20, 2);
+        $this->loan    = Loan::create([
             'borrower_id'          => $this->borrower->id,
             'rate_preset_id'       => $this->preset->id,
             'principal'            => 5000,
@@ -133,11 +126,10 @@ abstract class ScreenTestCase extends TestCase
             'daily_installment'    => $daily,
             'total_payable'        => $daily * 60,
             'disbursed_at'         => $disbursedAt->toDateString(),
-            'disbursed_by_user_id' => $this->staff->id,
+            'disbursed_by_user_id' => $this->admin->id,
             'status'               => 'active',
         ]);
 
-        // 3 paid schedule items and 1 payment
         for ($i = 1; $i <= 3; $i++) {
             $due = $disbursedAt->copy()->addDays($i);
             ScheduleItem::create([
@@ -148,23 +140,22 @@ abstract class ScreenTestCase extends TestCase
                 'amount_paid'     => $daily,
                 'status'          => 'paid',
             ]);
-
-            Payment::create([
-                'loan_id'           => $this->loan->id,
-                'collector_user_id' => $this->collector->id,
-                'amount'            => $daily,
-                'collected_at'      => $due->copy()->addHours(9),
-                'recorded_at'       => $due->copy()->addHours(9)->addSeconds(30),
-                'latitude'          => 14.6760,
-                'longitude'         => 121.0437,
-                'device_identifier' => 'DEV-TEST01',
-                'idempotency_key'   => Str::uuid(),
-                'is_voided'         => false,
-            ]);
         }
 
-        // One completed loan for history/rebate screens
-        $oldLoan = Loan::create([
+        $this->payment = Payment::create([
+            'loan_id'           => $this->loan->id,
+            'collector_user_id' => $this->collector->id,
+            'amount'            => $daily,
+            'collected_at'      => $disbursedAt->copy()->addDays(1)->addHours(9),
+            'recorded_at'       => $disbursedAt->copy()->addDays(1)->addHours(9)->addSeconds(30),
+            'latitude'          => 14.6760,
+            'longitude'         => 121.0437,
+            'device_identifier' => 'DEV-TEST01',
+            'idempotency_key'   => Str::uuid(),
+            'is_voided'         => false,
+        ]);
+
+        $completedLoan = Loan::create([
             'borrower_id'            => $this->borrower->id,
             'rate_preset_id'         => $this->preset->id,
             'principal'              => 3000,
@@ -173,16 +164,16 @@ abstract class ScreenTestCase extends TestCase
             'daily_installment'      => 60.00,
             'total_payable'          => 3600.00,
             'disbursed_at'           => Carbon::now()->subDays(100)->toDateString(),
-            'disbursed_by_user_id'   => $this->staff->id,
+            'disbursed_by_user_id'   => $this->admin->id,
             'status'                 => 'completed',
             'closed_at'              => Carbon::now()->subDays(40)->toDateString(),
             'missed_days_at_closure' => 2,
         ]);
 
         RebateGrant::create([
-            'loan_id'         => $oldLoan->id,
+            'loan_id'         => $completedLoan->id,
             'borrower_id'     => $this->borrower->id,
-            'rebate_rule_id'  => RebateRule::first()->id,
+            'rebate_rule_id'  => $rebateRule->id,
             'interest_amount' => 600.00,
             'rebate_amount'   => 30.00,
             'status'          => 'pending_approval',

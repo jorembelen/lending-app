@@ -1,5 +1,33 @@
 <div class="space-y-stack-md pb-8">
 
+    <!-- Account ID Card -->
+    @php
+        $borrowerRecord = \App\Models\Borrower::find(auth()->id());
+        $accountId = $borrowerRecord?->borrower_code ?? ('BRW-' . str_pad(auth()->id(), 6, '0', STR_PAD_LEFT));
+    @endphp
+    <button type="button"
+            class="w-full bg-surface-container-low rounded-xl border border-white/5 p-5 flex items-center justify-between gap-4 text-left active:opacity-80 transition-opacity"
+            x-data="{ copied: false }"
+            x-on:click="
+                navigator.clipboard?.writeText('{{ $accountId }}');
+                copied = true;
+                setTimeout(() => copied = false, 2000);
+            "
+            aria-label="Copy account ID {{ $accountId }}">
+        <div>
+            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Account ID</p>
+            <p class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed tracking-widest mt-0.5">{{ $accountId }}</p>
+            <p class="font-label-sm text-label-sm text-on-surface-variant/60 mt-1">Show to your collector if you don't have your QR code</p>
+        </div>
+        <div class="flex-shrink-0 flex flex-col items-center gap-1">
+            <span class="material-symbols-outlined text-primary-fixed/60 text-[24px]"
+                  x-text="copied ? 'check_circle' : 'content_copy'"
+                  :style="copied ? 'font-variation-settings: \'FILL\' 1' : ''"></span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant/50 text-[10px]"
+                  x-text="copied ? 'Copied!' : 'Tap to copy'"></span>
+        </div>
+    </button>
+
     <!-- Status Pill -->
     @if($this->loan)
     <div class="flex justify-center">

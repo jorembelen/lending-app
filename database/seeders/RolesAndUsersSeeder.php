@@ -33,6 +33,7 @@ class RolesAndUsersSeeder extends Seeder
         // Office staff
         $staffNames = [
             ['name' => 'Maria Santos',  'username' => 'maria.santos',  'email' => 'maria@lenpro.local'],
+            ['name' => 'Juan Dela Cruz',  'username' => 'staff',  'email' => 'juan@lenpro.local'],
             ['name' => 'Jose Reyes',    'username' => 'jose.reyes',    'email' => 'jose@lenpro.local'],
             ['name' => 'Ana Cruz',      'username' => 'ana.cruz',      'email' => 'ana@lenpro.local'],
         ];
@@ -47,7 +48,7 @@ class RolesAndUsersSeeder extends Seeder
 
         // Collectors
         $collectorNames = [
-            ['name' => 'Pedro Dela Cruz',  'username' => 'pedro.delacruz',  'email' => 'pedro@lenpro.local'],
+            ['name' => 'Pedro Dela Cruz',  'username' => 'collector',  'email' => 'pedro@lenpro.local'],
             ['name' => 'Liza Villanueva',  'username' => 'liza.villanueva',  'email' => 'liza@lenpro.local'],
             ['name' => 'Roberto Mendoza',  'username' => 'roberto.mendoza',  'email' => 'roberto@lenpro.local'],
             ['name' => 'Carmen Ramos',     'username' => 'carmen.ramos',     'email' => 'carmen@lenpro.local'],

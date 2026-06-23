@@ -13,10 +13,20 @@ class Borrower extends Model
         'full_name',
         'phone_number',
         'address',
+        'borrower_code',
         'qr_reference',
         'photo_path',
         'current_tier_id',
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Borrower $borrower) {
+            $borrower->updateQuietly([
+                'borrower_code' => 'BRW-' . str_pad($borrower->id, 6, '0', STR_PAD_LEFT),
+            ]);
+        });
+    }
 
     public function currentTier()
     {

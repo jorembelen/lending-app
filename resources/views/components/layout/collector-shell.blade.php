@@ -16,50 +16,63 @@
     @vite(['resources/css/tailwind.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="dark flex flex-col min-h-screen bg-background text-on-surface font-sans">
+<body class="dark flex flex-col min-h-screen bg-background text-on-surface font-sans overflow-x-hidden">
 
     <!-- Top App Bar -->
-    <header class="fixed top-0 w-full z-50 bg-background flex items-center justify-between px-margin-mobile h-touch-target-min border-b border-white/5">
-        <div class="flex items-center gap-3">
+    <header class="sticky top-0 z-50 bg-background flex items-center justify-between px-margin-mobile h-14 border-b border-white/5">
+        <div class="flex items-center gap-2">
             @if($showBack)
-                <a href="{{ $backHref ?? 'javascript:history.back()' }}" class="material-symbols-outlined text-primary active:scale-95 transition-transform">arrow_back</a>
+                <a href="{{ $backHref ?? 'javascript:history.back()' }}"
+                   class="flex items-center justify-center w-10 h-10 -ml-2 rounded-full active:bg-surface-container transition-colors"
+                   aria-label="Go back">
+                    <span class="material-symbols-outlined text-primary">arrow_back</span>
+                </a>
             @endif
             <h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight text-primary">{{ $title }}</h1>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
             @if($showNotif)
-                <button class="material-symbols-outlined text-primary p-2 active:scale-95 transition-transform">notifications</button>
+                <button class="flex items-center justify-center w-10 h-10 rounded-full active:bg-surface-container transition-colors"
+                        aria-label="Notifications">
+                    <span class="material-symbols-outlined text-primary">notifications</span>
+                </button>
             @endif
             {{ $actions ?? '' }}
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow pt-[64px] pb-[100px] px-margin-mobile">
-        {{ $slot }}
+    <main class="flex-grow pb-[100px] px-margin-mobile pt-4">
+        <div class="max-w-md mx-auto">
+            {{ $slot }}
+        </div>
     </main>
 
     <!-- Bottom Tab Bar -->
     <nav class="fixed bottom-0 w-full z-50 h-[80px] bg-surface-container border-t border-white/10 flex justify-around items-center px-4 pb-safe">
         <a href="{{ route('collector.route') }}"
-           class="flex flex-col items-center justify-center {{ $activeTab === 'route' ? 'bg-primary-fixed text-on-primary-fixed rounded-xl px-4 py-1' : 'text-on-surface-variant' }} active:scale-90 transition-all">
-            <span class="material-symbols-outlined" style="{{ $activeTab === 'route' ? \"font-variation-settings: 'FILL' 1\" : '' }}">directions_run</span>
-            <span class="font-label-sm text-label-sm">Route</span>
+           class="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-xl transition-all active:scale-90
+                  {{ $activeTab === 'route' ? 'bg-primary-fixed text-on-primary-fixed' : 'text-on-surface-variant' }}">
+            <span class="material-symbols-outlined" @if($activeTab === 'route') style="font-variation-settings: 'FILL' 1" @endif>directions_run</span>
+            <span class="text-[10px] font-medium">Route</span>
         </a>
         <a href="{{ route('collector.scan') }}"
-           class="flex flex-col items-center justify-center {{ $activeTab === 'scan' ? 'bg-primary-fixed text-on-primary-fixed rounded-xl px-4 py-1' : 'text-on-surface-variant' }} active:scale-90 transition-all">
+           class="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-xl transition-all active:scale-90
+                  {{ $activeTab === 'scan' ? 'bg-primary-fixed text-on-primary-fixed' : 'text-on-surface-variant' }}">
             <span class="material-symbols-outlined">qr_code_scanner</span>
-            <span class="font-label-sm text-label-sm">Scan</span>
+            <span class="text-[10px] font-medium">Scan</span>
         </a>
         <a href="{{ route('collector.summary') }}"
-           class="flex flex-col items-center justify-center {{ $activeTab === 'summary' ? 'bg-primary-fixed text-on-primary-fixed rounded-xl px-4 py-1' : 'text-on-surface-variant' }} active:scale-90 transition-all">
+           class="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-xl transition-all active:scale-90
+                  {{ $activeTab === 'summary' ? 'bg-primary-fixed text-on-primary-fixed' : 'text-on-surface-variant' }}">
             <span class="material-symbols-outlined">query_stats</span>
-            <span class="font-label-sm text-label-sm">Summary</span>
+            <span class="text-[10px] font-medium">Summary</span>
         </a>
-        <a href="{{ route('collector.profile') }}"
-           class="flex flex-col items-center justify-center {{ $activeTab === 'profile' ? 'bg-primary-fixed text-on-primary-fixed rounded-xl px-4 py-1' : 'text-on-surface-variant' }} active:scale-90 transition-all">
+        <a href="#"
+           class="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-xl transition-all active:scale-90
+                  {{ $activeTab === 'profile' ? 'bg-primary-fixed text-on-primary-fixed' : 'text-on-surface-variant' }}">
             <span class="material-symbols-outlined">person</span>
-            <span class="font-label-sm text-label-sm">Profile</span>
+            <span class="text-[10px] font-medium">Profile</span>
         </a>
     </nav>
 

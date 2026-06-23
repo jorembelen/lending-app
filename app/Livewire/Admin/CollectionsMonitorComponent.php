@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Loan;
 use App\Models\Payment;
+use App\Models\ScheduleItem;
 use App\Models\User;
 use Livewire\Component;
 
@@ -28,22 +28,22 @@ class CollectionsMonitorComponent extends Component
     public function getActiveCollectorsProperty()
     {
         return User::role('collector')
-            ->with(['payments' => fn ($q) => $q->whereDate('collected_at', today())])
+            ->with(['collectedPayments' => fn ($q) => $q->whereDate('collected_at', today())])
             ->get()
             ->map(function ($user) {
-                $totalAssigned  = Loan::where('collector_id', $user->id)->whereDate('due_date', today())->count();
-                $totalCollected = $user->payments->sum('amount');
-                $completed      = $user->payments->count();
+                $totalAssigned  = ScheduleItem::whereDate('due_date', today())->count();
+                $totalCollected = $user->collectedPayments->sum('amount');
+                $completed      = $user->collectedPayments->count();
                 $pct            = $totalAssigned > 0 ? round(($completed / $totalAssigned) * 100) : 0;
 
                 return [
-                    'id'            => $user->id,
-                    'name'          => $user->name,
-                    'assigned'      => $totalAssigned,
-                    'completed'     => $completed,
-                    'percent'       => $pct,
-                    'collected'     => $totalCollected,
-                    'last_sync'     => $user->last_active_at?->diffForHumans() ?? 'Unknown',
+                    'id'         => $user->id,
+                    'name'       => $user->name,
+                    'assigned'   => $totalAssigned,
+                    'completed'  => $completed,
+                    'percent'    => $pct,
+                    'collected'  => $totalCollected,
+                    'last_sync'  => $user->last_active_at?->diffForHumans() ?? 'Unknown',
                 ];
             });
     }

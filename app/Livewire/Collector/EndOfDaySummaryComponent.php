@@ -2,21 +2,22 @@
 
 namespace App\Livewire\Collector;
 
-use App\Models\Loan;
 use App\Models\Payment;
+use App\Models\ScheduleItem;
 use Livewire\Component;
 
 class EndOfDaySummaryComponent extends Component
 {
     public function getSummaryProperty(): array
     {
-        $collectorId = auth()->id();
+        $collectorId    = auth()->id();
         $totalCollected = Payment::where('collector_user_id', $collectorId)
             ->whereDate('collected_at', today())->sum('amount');
 
-        $assigned   = Loan::where('collector_id', $collectorId)->whereDate('due_date', today())->count();
-        $completed  = Payment::where('collector_user_id', $collectorId)->whereDate('collected_at', today())->count();
-        $missed     = max(0, $assigned - $completed);
+        $assigned  = ScheduleItem::whereDate('due_date', today())->count();
+        $completed = Payment::where('collector_user_id', $collectorId)
+            ->whereDate('collected_at', today())->count();
+        $missed    = max(0, $assigned - $completed);
         $efficiency = $assigned > 0 ? round(($completed / $assigned) * 100, 1) : 0;
 
         return compact('totalCollected', 'assigned', 'completed', 'missed', 'efficiency');
@@ -25,13 +26,12 @@ class EndOfDaySummaryComponent extends Component
     public function getMissedProperty()
     {
         $collectorId = auth()->id();
-        $paidIds = Payment::where('collector_user_id', $collectorId)
+        $paidLoanIds = Payment::where('collector_user_id', $collectorId)
             ->whereDate('collected_at', today())->pluck('loan_id');
 
-        return Loan::with('borrower')
-            ->where('collector_id', $collectorId)
+        return ScheduleItem::with('loan.borrower')
             ->whereDate('due_date', today())
-            ->whereNotIn('id', $paidIds)
+            ->whereNotIn('loan_id', $paidLoanIds)
             ->get();
     }
 

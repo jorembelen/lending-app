@@ -90,18 +90,18 @@
             class="w-full bg-surface-container rounded-xl border border-white/10 p-4 font-body-md text-on-surface focus:outline-none focus:border-primary-fixed transition-all resize-none h-32 placeholder:text-on-surface-variant/40"
         ></textarea>
     </section>
-</div>
 
-<!-- Fixed Confirm Button -->
-<div class="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md px-margin-mobile py-4 z-50">
-    <x-ui.button
-        variant="primary"
-        size="lg"
-        icon="check_circle"
-        wire:click="confirm"
-        wire:loading.attr="disabled"
-    >
-        <span wire:loading.remove wire:target="confirm">CONFIRM PAYMENT</span>
-        <span wire:loading wire:target="confirm">Processing...</span>
-    </x-ui.button>
+    <!-- Fixed Confirm Button -->
+    <div class="fixed bottom-[80px] left-0 w-full bg-background/80 backdrop-blur-md px-margin-mobile py-4 z-40">
+        <x-ui.button
+            variant="primary"
+            size="lg"
+            icon="check_circle"
+            wire:click="confirm"
+            wire:loading.attr="disabled"
+        >
+            <span wire:loading.remove wire:target="confirm">CONFIRM PAYMENT</span>
+            <span wire:loading wire:target="confirm">Processing...</span>
+        </x-ui.button>
+    </div>
 </div>

@@ -37,9 +37,9 @@ class BorrowersListComponent extends Component
     {
         $borrowers = Borrower::with(['loans' => fn ($q) => $q->latest()->limit(1)])
             ->when($this->search, fn ($q) =>
-                $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('email', 'like', "%{$this->search}%")
-                  ->orWhere('borrower_id', 'like', "%{$this->search}%")
+                $q->where('full_name', 'like', "%{$this->search}%")
+                  ->orWhere('phone_number', 'like', "%{$this->search}%")
+                  ->orWhere('borrower_code', 'like', "%{$this->search}%")
             )
             ->when($this->filter !== 'all', fn ($q) =>
                 $q->whereHas('loans', fn ($q) => $q->where('status', $this->filter))

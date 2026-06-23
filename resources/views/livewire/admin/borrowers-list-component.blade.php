@@ -64,13 +64,13 @@
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-full bg-surface-bright border border-outline flex items-center justify-center flex-shrink-0 overflow-hidden">
                                 @if($borrower->avatar)
-                                    <img src="{{ $borrower->avatar }}" alt="{{ $borrower->name }}" class="w-full h-full object-cover" />
+                                    <img src="{{ $borrower->avatar }}" alt="{{ $borrower->full_name }}" class="w-full h-full object-cover" />
                                 @else
                                     <span class="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
                                 @endif
                             </div>
                             <div>
-                                <p class="font-label-md text-label-md text-on-surface">{{ $borrower->name }}</p>
+                                <p class="font-label-md text-label-md text-on-surface">{{ $borrower->full_name }}</p>
                                 <p class="font-label-sm text-label-sm text-secondary-fixed-dim">{{ $borrower->email }}</p>
                             </div>
                         </div>
@@ -112,13 +112,13 @@
         <div class="bg-surface-container rounded-xl border border-outline-variant p-4 flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-surface-bright border border-outline flex items-center justify-center flex-shrink-0 overflow-hidden">
                 @if($borrower->avatar)
-                    <img src="{{ $borrower->avatar }}" alt="{{ $borrower->name }}" class="w-full h-full object-cover" />
+                    <img src="{{ $borrower->avatar }}" alt="{{ $borrower->full_name }}" class="w-full h-full object-cover" />
                 @else
                     <span class="material-symbols-outlined text-on-surface-variant">person</span>
                 @endif
             </div>
             <div class="flex-1 min-w-0">
-                <p class="font-label-md text-label-md text-on-surface truncate">{{ $borrower->name }}</p>
+                <p class="font-label-md text-label-md text-on-surface truncate">{{ $borrower->full_name }}</p>
                 <p class="font-label-sm text-label-sm text-secondary-fixed-dim">{{ $loan?->loan_id ?? 'No loan' }}</p>
             </div>
             <div class="flex flex-col items-end gap-1">

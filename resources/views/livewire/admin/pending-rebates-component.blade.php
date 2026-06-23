@@ -25,7 +25,7 @@
                         <span class="material-symbols-outlined text-on-surface-variant">person</span>
                     </div>
                     <div>
-                        <h3 class="font-label-md text-label-md text-on-surface">{{ $request->borrower?->name ?? 'Unknown' }}</h3>
+                        <h3 class="font-label-md text-label-md text-on-surface">{{ $request->borrower?->full_name ?? 'Unknown' }}</h3>
                         <p class="font-label-sm text-label-sm text-secondary-fixed-dim">
                             Rebate: ₱{{ number_format($request->amount ?? 0, 2) }} •
                             {{ $request->created_at?->format('M d, Y') }}

@@ -179,12 +179,17 @@ class User extends Authenticatable
     	return $name[$this->getGoogleSecurityStatus()];
     }
     
-    private function getGoogleSecurityStatus() 
+    private function getGoogleSecurityStatus()
     {
         $status = LoginSecurity::whereUserId($this->id)->first();
         if(isset($status)) {
             return $status->google2fa_enable;
         }
             return null;
+    }
+
+    public function collectedPayments()
+    {
+        return $this->hasMany(\App\Models\Payment::class, 'collector_user_id');
     }
 }

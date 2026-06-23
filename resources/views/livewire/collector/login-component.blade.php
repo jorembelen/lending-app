@@ -1,11 +1,11 @@
-<x-layout.standalone-page title="Voltage — Field Operations Login">
+<div class="flex flex-col min-h-screen">
 <main class="flex-grow flex flex-col px-margin-mobile pt-stack-lg pb-stack-md max-w-md mx-auto w-full">
 
     <!-- Brand -->
     <header class="flex flex-col items-center justify-center pt-12 pb-16">
         <div class="relative group">
-            <div class="absolute -inset-1 bg-primary-fixed blur opacity-20 group-hover:opacity-40 transition duration-1000 rounded-xl"></div>
-            <div class="relative bg-surface-container-lowest p-6 rounded-xl border border-white/5 flex items-center justify-center">
+            <div class="absolute -inset-2 bg-primary-fixed blur-xl opacity-30 group-hover:opacity-50 transition duration-700 rounded-2xl"></div>
+            <div class="relative bg-surface-container-low p-8 rounded-2xl border border-white/10 flex items-center justify-center shadow-[0_0_60px_rgba(195,244,0,0.15)]">
                 <span class="material-symbols-outlined text-primary-fixed" style="font-size:64px; font-variation-settings: 'FILL' 1;">bolt</span>
             </div>
         </div>
@@ -15,9 +15,6 @@
 
     <!-- Form -->
     <section class="flex flex-col space-y-stack-md flex-grow">
-
-        @if($errors->has('email') && !$errors->has('email')){{-- handled below --}}@endif
-
         <x-ui.input
             label="Work Email"
             type="email"
@@ -37,7 +34,9 @@
                     placeholder="••••••••"
                     class="w-full h-14 bg-surface-container-low border {{ $errors->first('password') ? 'border-error' : 'border-white/10' }} rounded-xl px-5 pr-12 text-body-md font-sans text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed"
                 />
-                <button type="button" @click="show = !show" class="absolute right-4 top-4 text-on-surface-variant/40 hover:text-on-surface transition-colors">
+                <button type="button" @click="show = !show"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 hover:text-on-surface transition-colors"
+                        :aria-label="show ? 'Hide password' : 'Show password'">
                     <span class="material-symbols-outlined" x-text="show ? 'visibility' : 'visibility_off'">visibility_off</span>
                 </button>
             </div>
@@ -76,15 +75,22 @@
         </x-ui.button>
     </section>
 
-    <footer class="mt-12 text-center">
-        <p class="font-label-sm text-label-sm text-on-surface-variant/40">Encrypted Session — VOLT</p>
+    <footer class="mt-10 text-center pb-4">
+        @php
+            $raw  = session()->getId();
+            $part1 = strtoupper(substr(preg_replace('/[^a-z0-9]/i', '', $raw), 0, 4));
+            $part2 = strtoupper(substr(preg_replace('/[^a-z0-9]/i', '', $raw), 4, 2));
+        @endphp
+        <p class="font-label-sm text-label-sm text-on-surface-variant/40">
+            Encrypted Session ID: VOLT-{{ $part1 }}-{{ $part2 }}
+        </p>
     </footer>
 
 </main>
 
 <!-- Background glow -->
-<div class="fixed inset-0 -z-10 pointer-events-none opacity-20 overflow-hidden">
-    <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-fixed/10 rounded-full blur-[120px]"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-primary-fixed/5 rounded-full blur-[100px]"></div>
+<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary-fixed/8 rounded-full blur-[140px]"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary-fixed/5 rounded-full blur-[120px]"></div>
 </div>
-</x-layout.standalone-page>
+</div>

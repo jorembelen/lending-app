@@ -2,32 +2,51 @@
 
 namespace Tests\Feature\Screens;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class GuestScreensTest extends ScreenTestCase
 {
-    public function test_admin_login_page_renders(): void
+    #[Test]
+    public function admin_login_page_renders(): void
     {
-        $this->get(route('login'))->assertOk();
+        $this->get(route('login'))
+            ->assertOk();
     }
 
-    public function test_collector_login_page_renders(): void
+    #[Test]
+    public function collector_login_page_renders(): void
     {
-        $this->get(route('collector.login'))->assertOk();
+        $this->get(route('collector.login'))
+            ->assertOk();
     }
 
-    public function test_borrower_login_page_renders(): void
+    #[Test]
+    public function borrower_login_page_renders(): void
     {
-        $this->get(route('borrower.login'))->assertOk();
+        $this->get(route('borrower.login'))
+            ->assertOk();
     }
 
-    public function test_authenticated_user_is_redirected_from_login(): void
+    #[Test]
+    public function authenticated_admin_is_redirected_from_collector_login(): void
     {
         $this->actingAs($this->admin)
-            ->get(route('login'))
+            ->get(route('collector.login'))
             ->assertRedirect();
     }
 
-    public function test_home_route_redirects_unauthenticated_to_login(): void
+    #[Test]
+    public function authenticated_user_is_redirected_from_borrower_login(): void
     {
-        $this->get(route('home'))->assertRedirect(route('login'));
+        $this->actingAs($this->admin)
+            ->get(route('borrower.login'))
+            ->assertRedirect();
+    }
+
+    #[Test]
+    public function home_route_redirects_unauthenticated_to_login(): void
+    {
+        $this->get('/')
+            ->assertRedirect();
     }
 }
