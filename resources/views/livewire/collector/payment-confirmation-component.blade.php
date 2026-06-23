@@ -51,15 +51,15 @@
                 <div class="mt-2 p-3 bg-surface-container-high rounded-lg border border-white/5">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-surface-bright flex items-center justify-center overflow-hidden">
-                            @if($this->payment->loan?->borrower?->avatar)
-                                <img src="{{ $this->payment->loan->borrower->avatar }}" alt="" class="w-full h-full object-cover" />
+                            @if($this->payment->loan?->borrower?->photo_path)
+                                <img src="{{ asset('storage/' . $this->payment->loan->borrower->photo_path) }}" alt="" class="w-full h-full object-cover" />
                             @else
                                 <span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span>
                             @endif
                         </div>
                         <div>
-                            <p class="font-label-md text-label-md text-primary">{{ $this->payment->loan?->borrower?->name ?? 'Borrower' }}</p>
-                            <p class="font-label-sm text-label-sm text-on-surface-variant">{{ $this->payment->loan?->loan_id ?? '' }}</p>
+                            <p class="font-label-md text-label-md text-primary">{{ $this->payment->loan?->borrower?->full_name ?? 'Borrower' }}</p>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant">Loan #{{ str_pad($this->payment->loan_id, 5, '0', STR_PAD_LEFT) }}</p>
                         </div>
                     </div>
                 </div>

@@ -65,8 +65,15 @@ class RecordPaymentComponent extends Component
             'amount' => 'required|numeric|min:0.01',
         ]);
 
+        $loan = $this->loan;
+
+        if (! $loan) {
+            $this->addError('amount', 'No active loan found for this borrower. Please refresh and try again.');
+            return;
+        }
+
         $payment = Payment::create([
-            'loan_id'           => $this->loan->id,
+            'loan_id'           => $loan->id,
             'collector_user_id' => auth()->id(),
             'amount'            => $this->amount,
             'collected_at'      => now(),

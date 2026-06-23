@@ -1,4 +1,4 @@
-<div class="pt-2 pb-48">
+<div class="pt-2">
 
     @php
         $b    = $this->borrower;
@@ -15,7 +15,7 @@
 
     <!-- ── Borrower Card ──────────────────────────────────────────── -->
     <section class="mt-stack-md">
-        <div class="bg-surface-container-low rounded-2xl px-5 py-4 border border-white/8 flex items-center gap-4">
+        <div class="bg-surface-container-low rounded-2xl px-5 py-4 border border-white/10 flex items-center gap-4">
 
             <!-- Avatar -->
             <div class="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant border border-white/10 flex items-center justify-center">
@@ -60,7 +60,7 @@
                 id="payment-amount"
                 type="number"
                 inputmode="decimal"
-                wire:model.live="amount"
+                wire:model.live.debounce.300ms="amount"
                 step="0.01"
                 min="0"
                 class="bg-transparent border-none text-center text-[56px] font-extrabold text-primary-fixed leading-none w-full max-w-[260px] focus:ring-0 outline-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -79,24 +79,24 @@
         <div class="flex gap-3 mt-stack-md">
             <button
                 wire:click="setExact"
-                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container-high rounded-xl font-semibold text-[13px] text-white border border-white/20 active:bg-surface-container-highest active:scale-95 transition-all">
                 Exact
             </button>
             <button
                 wire:click="setPartial"
-                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container-high rounded-xl font-semibold text-[13px] text-white border border-white/20 active:bg-surface-container-highest active:scale-95 transition-all">
                 Partial (50%)
             </button>
             <button
                 wire:click="clearAmount"
-                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container rounded-xl font-semibold text-[13px] text-on-surface border border-white/10 active:bg-surface-variant active:scale-95 transition-all">
+                class="flex-1 min-h-[52px] px-3 py-3 bg-surface-container-high rounded-xl font-semibold text-[13px] text-white border border-white/20 active:bg-surface-container-highest active:scale-95 transition-all">
                 Custom
             </button>
         </div>
     </section>
 
     <!-- ── Summary Card ───────────────────────────────────────────── -->
-    <section class="mt-stack-lg bg-surface-container-low rounded-2xl border border-white/8 overflow-hidden">
+    <section class="mt-stack-lg bg-surface-container-low rounded-2xl border border-white/10 overflow-hidden">
         <div class="flex justify-between items-center px-5 py-4">
             <span class="font-label-md text-label-md text-on-surface-variant">Total Remaining</span>
             <span class="font-bold text-on-surface text-[15px]">
@@ -129,35 +129,30 @@
             wire:model="notes"
             rows="3"
             placeholder="Add details about the collection…"
-            class="w-full bg-surface-container-low rounded-2xl border border-white/8 px-5 py-4 font-body-md text-on-surface placeholder:text-on-surface-variant/30 focus:outline-none focus:border-primary-fixed/50 transition-colors resize-none"
+            class="w-full bg-surface-container-low rounded-2xl border border-white/10 px-5 py-4 font-body-md text-on-surface placeholder:text-on-surface-variant/30 focus:outline-none focus:border-primary-fixed/50 transition-colors resize-none"
         ></textarea>
     </section>
 
-    @endif
+    <!-- ── Confirm Button ────────────────────────────────────────── -->
+    <section class="mt-stack-lg mb-4">
+        <button
+            wire:click="confirm"
+            wire:loading.attr="disabled"
+            class="w-full h-[56px] bg-primary-fixed text-on-primary-fixed rounded-2xl flex items-center justify-center gap-3 font-extrabold text-[15px] uppercase tracking-widest active:brightness-90 active:scale-[0.98] transition-all disabled:opacity-60 shadow-lg shadow-primary-fixed/20"
+        >
+            <span wire:loading.remove wire:target="confirm" class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Confirm Payment
+            </span>
+            <span wire:loading wire:target="confirm" class="flex items-center gap-2">
+                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                Processing…
+            </span>
+        </button>
+    </section>
 
-    <!-- ── Fixed Confirm Button ───────────────────────────────────── -->
-    {{-- Tab bar is h-[80px]; sit directly on top of it --}}
-    @if($b && $loan)
-    <div class="fixed bottom-[80px] left-0 w-full z-[49]">
-        <div class="bg-background/80 backdrop-blur-lg px-4 pt-3 pb-3 border-t border-white/5">
-            <button
-                wire:click="confirm"
-                wire:loading.attr="disabled"
-                class="w-full h-[56px] bg-primary-fixed text-on-primary-fixed rounded-2xl flex items-center justify-center gap-3 font-extrabold text-[15px] uppercase tracking-widest active:brightness-90 active:scale-[0.98] transition-all disabled:opacity-60 shadow-lg shadow-primary-fixed/20"
-            >
-                <span wire:loading.remove wire:target="confirm" class="flex items-center gap-3">
-                    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                    Confirm Payment
-                </span>
-                <span wire:loading wire:target="confirm" class="flex items-center gap-2">
-                    <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-                    </svg>
-                    Processing…
-                </span>
-            </button>
-        </div>
-    </div>
     @endif
 </div>
