@@ -24,6 +24,8 @@ class TodayRouteComponent extends Component
             ->when($this->search, fn ($q) =>
                 $q->whereHas('loan.borrower', fn ($q) =>
                     $q->where('full_name', 'like', "%{$this->search}%")
+                      ->orWhere('borrower_code', 'like', "%{$this->search}%")
+                      ->orWhere('phone_number', 'like', "%{$this->search}%")
                 )
             )
             ->get()

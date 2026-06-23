@@ -24,42 +24,52 @@
 
                     <!-- Borrower Search -->
                     <div class="space-y-2" x-data="{ open: false }">
-                        <label for="borrower-search" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Search Borrower</label>
+                        <label for="borrower-search" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                            Search Borrower
+                        </label>
                         <div class="relative">
                             <div class="flex items-center bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 focus-within:border-primary-fixed transition-all">
-                                <span class="material-symbols-outlined text-primary-fixed mr-3">person_search</span>
+                                <span class="material-symbols-outlined text-primary-fixed mr-3 flex-shrink-0">person_search</span>
                                 <input
                                     id="borrower-search"
                                     type="text"
                                     wire:model.live.debounce.300ms="borrowerSearch"
                                     @focus="open = true"
                                     @click.outside="open = false"
-                                    placeholder="Search by name or ID..."
-                                    class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-secondary-fixed-dim/50 outline-none"
+                                    placeholder="Type at least 2 characters…"
+                                    autocomplete="off"
+                                    class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-on-surface-variant/50 outline-none text-sm"
                                 />
                                 @if($selectedBorrower)
-                                    <span class="material-symbols-outlined text-primary-fixed" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                    <span class="material-symbols-outlined text-primary-fixed flex-shrink-0" style="font-variation-settings: 'FILL' 1;">verified</span>
                                 @endif
                             </div>
+
                             @if($selectedBorrower)
-                                <p class="absolute -bottom-5 left-0 text-[10px] text-primary-fixed font-bold tracking-widest uppercase">
-                                    TRUSTED BORROWER • {{ $selectedBorrower->loans()->where('status','completed')->count() }} COMPLETED LOANS
+                                <p class="mt-1 text-[11px] text-primary-fixed font-bold tracking-widest uppercase">
+                                    {{ $selectedBorrower->full_name }} &bull; {{ $selectedBorrower->loans()->where('status','completed')->count() }} completed loan(s)
                                 </p>
                             @endif
 
                             <!-- Dropdown results -->
-                            @if($borrowerResults->count() && $borrowerSearch)
-                            <div class="absolute top-full left-0 w-full mt-1 bg-surface-container-high border border-outline-variant rounded-xl overflow-hidden z-10">
+                            @if($borrowerResults->count() && strlen($borrowerSearch) >= 2)
+                            <div
+                                x-show="open"
+                                class="absolute top-full left-0 w-full mt-1 bg-surface-container-high border border-outline-variant rounded-xl overflow-hidden z-20 shadow-lg"
+                            >
                                 @foreach($borrowerResults as $result)
                                 <button
                                     type="button"
                                     wire:click="selectBorrower({{ $result->id }})"
-                                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-container-highest text-left transition-colors"
+                                    @click="open = false"
+                                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface-container-highest text-left transition-colors border-b border-outline-variant/20 last:border-0"
                                 >
-                                    <span class="material-symbols-outlined text-secondary-fixed-dim text-[18px]">person</span>
-                                    <div>
-                                        <p class="font-label-md text-label-md text-on-surface">{{ $result->name }}</p>
-                                        <p class="font-label-sm text-label-sm text-secondary-fixed-dim">{{ $result->borrower_id }}</p>
+                                    <span class="w-8 h-8 rounded-full bg-primary-fixed/10 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-primary-fixed text-[16px]">person</span>
+                                    </span>
+                                    <div class="min-w-0">
+                                        <p class="font-semibold text-on-surface text-sm truncate">{{ $result->full_name }}</p>
+                                        <p class="text-xs text-on-surface-variant">{{ $result->borrower_code ?? '—' }}</p>
                                     </div>
                                 </button>
                                 @endforeach
@@ -69,12 +79,35 @@
                         @error('borrowerId') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                    <!-- Rate Preset -->
+                    <div class="space-y-2">
+                        <label for="rate-preset" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                            Rate Preset
+                        </label>
+                        <select
+                            id="rate-preset"
+                            wire:change="selectPreset($event.target.value)"
+                            class="w-full bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-fixed transition-all text-sm"
+                        >
+                            <option value="">— Select a preset —</option>
+                            @foreach($ratePresets as $preset)
+                            <option value="{{ $preset->id }}" {{ $ratePresetId == $preset->id ? 'selected' : '' }}>
+                                {{ $preset->name }} (₱{{ number_format($preset->rate_per_1000, 2) }}/₱1000 · {{ $preset->term_days }}d)
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('ratePresetId') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
                         <!-- Principal Amount -->
                         <div class="space-y-2">
-                            <label for="principal" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Principal Amount</label>
+                            <label for="principal" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                                Principal Amount
+                            </label>
                             <div class="flex items-center bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 focus-within:border-primary-fixed transition-all">
-                                <span class="text-secondary-fixed-dim mr-2 font-bold">₱</span>
+                                <span class="text-on-surface-variant mr-2 font-bold flex-shrink-0">₱</span>
                                 <input
                                     id="principal"
                                     type="number"
@@ -87,10 +120,13 @@
                             @error('principal') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Interest Rate -->
+                        <!-- Rate per ₱1000 -->
                         <div class="space-y-2">
-                            <label for="interest-rate" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Interest Rate (%)</label>
+                            <label for="interest-rate" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                                Rate per ₱1,000
+                            </label>
                             <div class="flex items-center bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 focus-within:border-primary-fixed transition-all">
+                                <span class="text-on-surface-variant mr-2 font-bold flex-shrink-0">₱</span>
                                 <input
                                     id="interest-rate"
                                     type="number"
@@ -99,45 +135,35 @@
                                     placeholder="0.00"
                                     class="bg-transparent border-none focus:ring-0 w-full text-on-surface text-headline-md font-headline-md outline-none"
                                 />
-                                <span class="text-secondary-fixed-dim ml-2 font-bold">%</span>
+                                <span class="text-on-surface-variant ml-2 text-label-sm font-label-sm flex-shrink-0">/₱1k</span>
                             </div>
                             @error('interestRate') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Term -->
+                        <!-- Term (Days) -->
                         <div class="space-y-2">
-                            <label for="term-days" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Loan Term (Days)</label>
+                            <label for="term-days" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                                Loan Term
+                            </label>
                             <div class="flex items-center bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 focus-within:border-primary-fixed transition-all">
                                 <input
                                     id="term-days"
                                     type="number"
                                     inputmode="numeric"
                                     wire:model.blur="termDays"
-                                    placeholder="30"
+                                    placeholder="60"
                                     class="bg-transparent border-none focus:ring-0 w-full text-on-surface outline-none"
                                 />
-                                <span class="text-secondary-fixed-dim ml-2 text-label-sm font-label-sm">days</span>
+                                <span class="text-on-surface-variant ml-2 text-label-sm font-label-sm flex-shrink-0">days</span>
                             </div>
                             @error('termDays') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Payment Frequency -->
-                        <div class="space-y-2">
-                            <label for="payment-frequency" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Payment Frequency</label>
-                            <select
-                                id="payment-frequency"
-                                wire:model="paymentFrequency"
-                                class="w-full bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-fixed transition-all"
-                            >
-                                <option value="daily">Daily</option>
-                                <option value="weekly">Weekly</option>
-                                <option value="monthly">Monthly</option>
-                            </select>
-                        </div>
-
                         <!-- Release Date -->
-                        <div class="space-y-2 sm:col-span-2">
-                            <label for="release-date" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Release Date</label>
+                        <div class="space-y-2">
+                            <label for="release-date" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                                Release Date
+                            </label>
                             <input
                                 id="release-date"
                                 type="date"
@@ -147,17 +173,6 @@
                             @error('releaseDate') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Purpose -->
-                        <div class="space-y-2 sm:col-span-2">
-                            <label for="purpose" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">Loan Purpose (Optional)</label>
-                            <input
-                                id="purpose"
-                                type="text"
-                                wire:model="purpose"
-                                placeholder="Business, personal, etc."
-                                class="w-full bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 text-on-surface placeholder:text-secondary-fixed-dim/50 focus:outline-none focus:border-primary-fixed transition-all"
-                            />
-                        </div>
                     </div>
                 </div>
             </x-ui.card>
@@ -169,12 +184,18 @@
                 <h3 class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider mb-4">Loan Summary</h3>
                 <div class="space-y-4">
                     <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+                        <span class="font-label-md text-label-md text-secondary-fixed-dim">Borrower</span>
+                        <span class="font-label-md text-label-md text-on-surface text-right max-w-[140px] truncate">
+                            {{ $selectedBorrower?->full_name ?? '—' }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
                         <span class="font-label-md text-label-md text-secondary-fixed-dim">Principal</span>
                         <span class="font-label-md text-label-md text-on-surface">₱{{ number_format((float)$principal, 2) }}</span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
-                        <span class="font-label-md text-label-md text-secondary-fixed-dim">Interest</span>
-                        <span class="font-label-md text-label-md text-on-surface">{{ $interestRate ?: '0' }}%</span>
+                        <span class="font-label-md text-label-md text-secondary-fixed-dim">Rate</span>
+                        <span class="font-label-md text-label-md text-on-surface">₱{{ $interestRate ?: '0' }} / ₱1k</span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
                         <span class="font-label-md text-label-md text-secondary-fixed-dim">Term</span>
@@ -199,7 +220,7 @@
                 wire:loading.attr="disabled"
             >
                 <span wire:loading.remove wire:target="save">Release Loan</span>
-                <span wire:loading wire:target="save">Processing...</span>
+                <span wire:loading wire:target="save">Processing…</span>
             </x-ui.button>
         </div>
     </div>

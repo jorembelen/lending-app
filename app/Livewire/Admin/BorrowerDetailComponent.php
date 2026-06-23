@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Borrower;
 use App\Models\Loan;
 use Livewire\Component;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BorrowerDetailComponent extends Component
 {
@@ -17,7 +18,7 @@ class BorrowerDetailComponent extends Component
 
     public function getBorrowerProperty(): ?Borrower
     {
-        return Borrower::find($this->borrowerId);
+        return Borrower::with('account')->find($this->borrowerId);
     }
 
     public function getLoansProperty()
@@ -33,11 +34,25 @@ class BorrowerDetailComponent extends Component
             ?? $this->loans->first();
     }
 
+    public function getQrCodeSvgProperty(): string
+    {
+        $borrower = $this->borrower;
+        if (! $borrower) { return ''; }
+
+        $value = $borrower->qr_reference ?? $borrower->borrower_code ?? (string) $borrower->id;
+
+        return (string) QrCode::format('svg')
+            ->size(160)
+            ->margin(1)
+            ->errorCorrection('H')
+            ->generate($value);
+    }
+
     public function render()
     {
         return view('livewire.admin.borrower-detail-component')
             ->layout('components.layout.admin-shell', [
-                'title'     => $this->borrower?->name ?? 'Borrower Detail',
+                'title'     => $this->borrower?->full_name ?? 'Borrower Detail',
                 'activeNav' => 'borrowers',
             ]);
     }

@@ -21,8 +21,8 @@ class QrScannerComponent extends Component
         $this->scannedValue  = $value;
         $this->errorMessage  = null;
 
-        $borrower = Borrower::where('qr_code', $value)
-            ->orWhere('borrower_id', $value)
+        $borrower = Borrower::where('qr_reference', $value)
+            ->orWhere('borrower_code', $value)
             ->first();
 
         if (! $borrower) {

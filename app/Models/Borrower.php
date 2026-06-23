@@ -21,6 +21,12 @@ class Borrower extends Model
 
     protected static function booted(): void
     {
+        static::creating(function (Borrower $borrower) {
+            if (empty($borrower->qr_reference)) {
+                $borrower->qr_reference = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+
         static::created(function (Borrower $borrower) {
             $borrower->updateQuietly([
                 'borrower_code' => 'BRW-' . str_pad($borrower->id, 6, '0', STR_PAD_LEFT),

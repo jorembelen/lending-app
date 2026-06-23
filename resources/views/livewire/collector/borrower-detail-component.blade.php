@@ -7,21 +7,32 @@
         </div>
     @else
 
+    @php
+        $b          = $this->borrower;
+        $amountPaid = $this->loan
+            ? (float) $this->loan->payments()->where('is_voided', false)->sum('amount')
+            : 0.0;
+        $paidPct    = ($this->loan && (float) $this->loan->total_payable > 0)
+            ? min(100, $amountPaid / (float) $this->loan->total_payable * 100)
+            : 0;
+    @endphp
+
     <!-- Profile Section -->
     <section class="flex flex-col gap-stack-md">
         <div class="flex items-center gap-gutter">
             <div class="w-20 h-20 rounded-xl overflow-hidden bg-surface-container-high border border-white/10 flex-shrink-0 flex items-center justify-center">
-                @if($this->borrower->avatar)
-                    <img src="{{ $this->borrower->avatar }}" alt="{{ $this->borrower->name }}" class="w-full h-full object-cover" />
+                @if($b->photo_path)
+                    <img src="{{ asset('storage/' . $b->photo_path) }}" alt="{{ $b->full_name }}" class="w-full h-full object-cover" />
                 @else
                     <span class="material-symbols-outlined text-on-surface-variant" style="font-size:40px;">person</span>
                 @endif
             </div>
-            <div class="flex flex-col">
-                <h2 class="font-headline-md text-headline-md text-primary leading-tight">{{ $this->borrower->name }}</h2>
+            <div class="flex flex-col min-w-0">
+                <h2 class="font-headline-md text-headline-md text-primary leading-tight">{{ $b->full_name }}</h2>
+                <p class="font-mono text-xs text-on-surface-variant tracking-widest mt-0.5">{{ $b->borrower_code ?? '—' }}</p>
                 <p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1 mt-1">
-                    <span class="material-symbols-outlined text-[16px]">location_on</span>
-                    {{ $this->borrower->address ?? 'No address on file' }}
+                    <span class="material-symbols-outlined text-[16px]">phone</span>
+                    {{ $b->phone_number ?? 'No phone on file' }}
                 </p>
             </div>
         </div>
@@ -31,20 +42,16 @@
         <div class="grid grid-cols-2 gap-4">
             <div class="col-span-2 bg-surface-container-low p-5 rounded-xl border border-white/5 flex flex-col gap-1">
                 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">TOTAL PRINCIPAL</span>
-                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed">₱{{ number_format($this->loan->principal, 2) }}</span>
+                <span class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed">₱{{ number_format((float) $this->loan->principal, 2) }}</span>
             </div>
             <div class="bg-surface-container-low p-5 rounded-xl border border-white/5 flex flex-col gap-1">
                 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">PAID</span>
-                <span class="font-headline-md text-headline-md text-primary">₱{{ number_format($this->loan->amount_paid ?? 0, 2) }}</span>
-                @php $paidPct = $this->loan->principal > 0 ? ($this->loan->amount_paid / $this->loan->principal * 100) : 0; @endphp
+                <span class="font-headline-md text-headline-md text-primary">₱{{ number_format($amountPaid, 2) }}</span>
                 <x-ui.progress-bar :percent="$paidPct" height="h-1" class="mt-2" />
             </div>
             <div class="bg-surface-container-low p-5 rounded-xl border border-white/5 flex flex-col gap-1">
                 <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">REMAINING</span>
-                <span class="font-headline-md text-headline-md text-error">₱{{ number_format($this->loan->remaining_balance ?? 0, 2) }}</span>
-                @if($this->loan->days_overdue ?? 0 > 0)
-                    <span class="font-label-sm text-label-sm text-error/60 mt-2 italic">Overdue {{ $this->loan->days_overdue }} day(s)</span>
-                @endif
+                <span class="font-headline-md text-headline-md text-error">₱{{ number_format((float) $this->loan->remaining_balance, 2) }}</span>
             </div>
         </div>
         @endif
