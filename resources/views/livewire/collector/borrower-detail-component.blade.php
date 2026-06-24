@@ -1,4 +1,4 @@
-<div class="pt-2 pb-32">
+<div class="pt-2 pb-44">
 
     @if(!$this->borrower)
         <div class="flex flex-col items-center justify-center py-20 text-center">
@@ -99,13 +99,18 @@
 
     @endif
 
-    <!-- Fixed Scan CTA -->
+    <!-- Fixed Collect CTA -->
     @if($this->borrower && $this->loan)
-    <div class="fixed bottom-[80px] left-0 w-full px-margin-mobile pb-3 bg-gradient-to-t from-background via-background/90 to-transparent z-40">
+    <div class="fixed bottom-[80px] left-0 w-full px-margin-mobile pb-3 bg-gradient-to-t from-background via-background/90 to-transparent z-40 flex flex-col gap-2">
         <a href="{{ route('collector.scan', ['borrower' => $borrowerId]) }}"
            class="w-full h-14 bg-primary-fixed text-on-primary-fixed rounded-xl flex items-center justify-center gap-3 font-label-md text-label-md font-bold active:scale-95 transition-all shadow-lg shadow-primary-fixed/20">
             <span class="material-symbols-outlined">qr_code_scanner</span>
             Scan QR to Collect Payment
+        </a>
+        <a href="{{ route('collector.payment', $borrowerId) }}"
+           class="w-full h-12 bg-surface-container-high text-primary border border-white/10 rounded-xl flex items-center justify-center gap-2 font-label-md text-label-md font-bold active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[20px]">keyboard</span>
+            Collect Manually (No QR)
         </a>
     </div>
     @endif
