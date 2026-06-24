@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/css/tailwind.css',
                 'resources/js/app.js',
                 'resources/js/qr-scanner.js',
+                'resources/js/collector/index.js',
             ],
             refresh: true,
         }),

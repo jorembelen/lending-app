@@ -4,7 +4,7 @@ namespace App\Livewire\Collector;
 
 use App\Models\Borrower;
 use App\Models\Loan;
-use App\Models\Payment;
+use App\Services\PaymentRecorder;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -59,7 +59,15 @@ class RecordPaymentComponent extends Component
         return max(0, (float) $this->loan->remaining_balance - $this->amount);
     }
 
-    public function confirm(): void
+    /**
+     * Online confirm path. Note: the production UX captures payments
+     * queue-first in the browser (IndexedDB) and syncs them through the
+     * collector payments API so the offline and online paths share one code
+     * path (see PaymentRecorder). This server-side handler remains as a
+     * progressive-enhancement fallback for when JavaScript is unavailable,
+     * and delegates to the same recorder so behaviour is identical.
+     */
+    public function confirm(PaymentRecorder $recorder): void
     {
         $this->validate([
             'amount' => 'required|numeric|min:0.01',
@@ -72,60 +80,14 @@ class RecordPaymentComponent extends Component
             return;
         }
 
-        $payment = \Illuminate\Support\Facades\DB::transaction(function () use ($loan) {
-            $payment = Payment::create([
-                'loan_id'           => $loan->id,
-                'collector_user_id' => auth()->id(),
-                'amount'            => $this->amount,
-                'collected_at'      => now(),
-                'recorded_at'       => now(),
-                'idempotency_key'   => Str::uuid()->toString(),
-                'is_voided'         => false,
-            ]);
+        $result = $recorder->record(
+            loan: $loan,
+            amount: (float) $this->amount,
+            idempotencyKey: Str::uuid()->toString(),
+            collectorUserId: auth()->id(),
+        );
 
-            $this->allocateToSchedule($loan, (float) $this->amount);
-
-            return $payment;
-        });
-
-        $this->redirect(route('collector.payment.confirmed', $payment->id), navigate: true);
-    }
-
-    /**
-     * Apply a payment across the loan's unpaid schedule items in due order (FIFO),
-     * updating each item's amount_paid and status so the route and summaries
-     * always reflect real collections.
-     */
-    private function allocateToSchedule(Loan $loan, float $amount): void
-    {
-        $remaining = $amount;
-
-        $items = $loan->scheduleItems()
-            ->whereIn('status', ['pending', 'partially_paid', 'missed'])
-            ->orderBy('due_date')
-            ->orderBy('sequence_number')
-            ->get();
-
-        foreach ($items as $item) {
-            if ($remaining <= 0) {
-                break;
-            }
-
-            $owed = (float) $item->amount_due - (float) $item->amount_paid;
-            if ($owed <= 0) {
-                continue;
-            }
-
-            $applied  = min($remaining, $owed);
-            $newPaid  = (float) $item->amount_paid + $applied;
-
-            $item->update([
-                'amount_paid' => $newPaid,
-                'status'      => $newPaid >= (float) $item->amount_due ? 'paid' : 'partially_paid',
-            ]);
-
-            $remaining -= $applied;
-        }
+        $this->redirect(route('collector.payment.confirmed', $result['payment']->id), navigate: true);
     }
 
     public function render()

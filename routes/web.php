@@ -66,7 +66,17 @@ Route::prefix('collector')->name('collector.')->middleware(['auth', 'role:collec
     Route::get('/payment/{borrowerId}', App\Livewire\Collector\RecordPaymentComponent::class)->name('payment');
     Route::get('/payment/{paymentId}/confirmed', App\Livewire\Collector\PaymentConfirmationComponent::class)->name('payment.confirmed');
     Route::get('/summary',            App\Livewire\Collector\EndOfDaySummaryComponent::class)->name('summary');
+
+    // JSON API consumed by the PWA's offline cache + payment sync queue.
+    Route::get('/api/route',     [App\Http\Controllers\Collector\RouteApiController::class, 'index'])->name('api.route');
+    Route::post('/api/payments', [App\Http\Controllers\Collector\PaymentApiController::class, 'store'])->name('api.payments');
 });
+
+// Admin-facing one-time onboarding checklist for setting up a new collector's
+// device as an installable PWA. Visible to office staff, not collectors.
+Route::get('/collector-onboarding', App\Livewire\Collector\OnboardingComponent::class)
+    ->name('collector.onboarding')
+    ->middleware(['auth', 'role:admin|staff|collector']);
 
 // ─── Admin Surface ────────────────────────────────────────────────────────────
 Route::prefix('admin-panel')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {

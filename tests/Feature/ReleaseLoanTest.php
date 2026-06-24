@@ -20,6 +20,7 @@ class ReleaseLoanTest extends TestCase
     use RefreshDatabase;
 
     private User       $admin;
+    private User       $collector;
     private Borrower   $borrower;
     private RatePreset $preset;
 
@@ -33,6 +34,9 @@ class ReleaseLoanTest extends TestCase
 
         $this->admin = User::factory()->create(['name' => 'Admin User', 'status' => 1]);
         $this->admin->assignRole('admin');
+
+        $this->collector = User::factory()->create(['name' => 'Collector User', 'status' => 1]);
+        $this->collector->assignRole('collector');
 
         $tier = LoyaltyTier::create([
             'name'                       => 'Standard',
@@ -284,6 +288,7 @@ class ReleaseLoanTest extends TestCase
             ->test(ReleaseNewLoanComponent::class)
             ->set('borrowerId', $this->borrower->id)
             ->set('ratePresetId', (string) $this->preset->id)
+            ->set('collectorId', (string) $this->collector->id)
             ->set('principal', '5000')
             ->set('interestRate', '20')
             ->set('termDays', '60')
@@ -313,6 +318,7 @@ class ReleaseLoanTest extends TestCase
             ->test(ReleaseNewLoanComponent::class)
             ->set('borrowerId', $this->borrower->id)
             ->set('ratePresetId', (string) $this->preset->id)
+            ->set('collectorId', (string) $this->collector->id)
             ->set('principal', '5000')
             ->set('interestRate', '20')
             ->set('termDays', '60')

@@ -1,6 +1,6 @@
 {
   "resources/css/tailwind.css": {
-    "file": "assets/tailwind-ee3916df.css",
+    "file": "assets/tailwind-5289d1d5.css",
     "isEntry": true,
     "src": "resources/css/tailwind.css"
   },
@@ -8,6 +8,11 @@
     "file": "assets/app-ecd146ba.js",
     "isEntry": true,
     "src": "resources/js/app.js"
+  },
+  "resources/js/collector/index.js": {
+    "file": "assets/index-a5163a61.js",
+    "isEntry": true,
+    "src": "resources/js/collector/index.js"
   },
   "resources/js/qr-scanner.js": {
     "file": "assets/qr-scanner-5d50100f.js",

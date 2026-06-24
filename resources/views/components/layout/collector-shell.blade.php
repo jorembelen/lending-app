@@ -12,8 +12,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+    {{-- PWA: installable collector app shell --}}
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}" />
+    <meta name="theme-color" content="#131313" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Collector" />
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}" />
+
     <title>{{ $title }} — {{ config('app.name') }}</title>
-    @vite(['resources/css/tailwind.css', 'resources/js/app.js'])
+    @vite(['resources/css/tailwind.css', 'resources/js/app.js', 'resources/js/collector/index.js'])
     @livewireStyles
 </head>
 <body class="dark flex flex-col min-h-screen bg-background text-on-surface font-sans overflow-x-hidden">

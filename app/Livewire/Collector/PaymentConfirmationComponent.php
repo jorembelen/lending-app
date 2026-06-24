@@ -22,6 +22,9 @@ class PaymentConfirmationComponent extends Component
     public function render()
     {
         return view('livewire.collector.payment-confirmation-component')
-            ->layout('components.layout.standalone-page', ['title' => 'Payment Confirmed — Voltage']);
+            ->layout('components.layout.standalone-page', [
+                'title' => 'Payment Confirmed — Voltage',
+                'pwa'   => true,
+            ]);
     }
 }

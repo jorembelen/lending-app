@@ -39,6 +39,7 @@ class QrScannerComponent extends Component
             ->layout('components.layout.standalone-page', [
                 'title'     => 'Scan QR — Voltage',
                 'withQrLib' => true,
+                'pwa'       => true,
             ]);
     }
 }

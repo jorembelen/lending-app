@@ -133,18 +133,57 @@
         ></textarea>
     </section>
 
-    <!-- ── Confirm Button ────────────────────────────────────────── -->
-    <section class="mt-stack-lg mb-4">
+    <!-- ── Confirm Button (queue-first capture, online or offline) ──── -->
+    <section
+        class="mt-stack-lg mb-4"
+        x-data="{
+            submitting: false,
+            result: null,        // null | 'synced' | 'queued' | 'needs_attention' | 'invalid'
+            message: '',
+            async submit() {
+                const input = document.getElementById('payment-amount');
+                const val = parseFloat((input && input.value) || '0');
+                if (!(val > 0)) {
+                    this.result = 'invalid';
+                    this.message = 'Enter an amount greater than zero.';
+                    return;
+                }
+                if (!window.collectorApp) {
+                    // JS bundle not ready — fall back to the server round-trip.
+                    @this.call('confirm');
+                    return;
+                }
+                this.submitting = true;
+                try {
+                    const rec = await window.collectorApp.queuePayment({ loanId: {{ $loan->id }}, amount: val });
+                    let state = 'queued';
+                    if (navigator.onLine) {
+                        await window.collectorApp.flush();
+                        const updated = await window.collectorApp.db.getPayment(rec.idempotency_key);
+                        state = updated ? updated.state : 'queued';
+                    }
+                    this.result = state;
+                } catch (e) {
+                    // Already durably queued; surface it as queued.
+                    this.result = 'queued';
+                } finally {
+                    this.submitting = false;
+                }
+            }
+        }"
+    >
+        <!-- Confirm button (hidden once we have a terminal result) -->
         <button
-            wire:click="confirm"
-            wire:loading.attr="disabled"
+            x-show="result === null || result === 'invalid'"
+            @click="submit()"
+            :disabled="submitting"
             class="w-full h-[56px] bg-primary-fixed text-on-primary-fixed rounded-2xl flex items-center justify-center gap-3 font-extrabold text-[15px] uppercase tracking-widest active:brightness-90 active:scale-[0.98] transition-all disabled:opacity-60 shadow-lg shadow-primary-fixed/20"
         >
-            <span wire:loading.remove wire:target="confirm" class="flex items-center gap-3">
+            <span x-show="!submitting" class="flex items-center gap-3">
                 <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                 Confirm Payment
             </span>
-            <span wire:loading wire:target="confirm" class="flex items-center gap-2">
+            <span x-show="submitting" class="flex items-center gap-2">
                 <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
@@ -152,6 +191,45 @@
                 Processing…
             </span>
         </button>
+
+        <p x-show="result === 'invalid'" x-cloak class="font-label-sm text-label-sm text-error mt-3 text-center" x-text="message"></p>
+
+        <!-- Online success: standard confirmation -->
+        <div x-show="result === 'synced'" x-cloak class="bg-primary-fixed/10 border border-primary-fixed/30 rounded-2xl px-5 py-6 text-center">
+            <span class="material-symbols-outlined text-primary-fixed text-[44px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            <p class="font-bold text-on-surface text-[17px] mt-2">Payment recorded</p>
+            <p class="text-on-surface-variant text-sm mt-1">The collection has been saved.</p>
+            <a href="{{ route('collector.route') }}" wire:navigate
+               class="mt-5 inline-flex items-center justify-center w-full h-[52px] bg-primary-fixed text-on-primary-fixed rounded-2xl font-bold uppercase tracking-widest text-[14px] active:brightness-90">
+                Back to Route
+            </a>
+        </div>
+
+        <!-- Offline / not-yet-synced: queued state, distinct from success -->
+        <div x-show="result === 'queued'" x-cloak class="bg-[#3c4d00]/30 border border-primary-fixed/30 rounded-2xl px-5 py-6 text-center">
+            <span class="material-symbols-outlined text-primary-fixed text-[44px]">cloud_queue</span>
+            <p class="font-bold text-on-surface text-[17px] mt-2">Queued — will sync</p>
+            <p class="text-on-surface-variant text-sm mt-1 leading-relaxed">
+                Saved on this device. It will sync automatically once you're back on signal — no action needed.
+            </p>
+            <a href="{{ route('collector.route') }}" wire:navigate
+               class="mt-5 inline-flex items-center justify-center w-full h-[52px] bg-surface-container-high text-white border border-white/20 rounded-2xl font-bold uppercase tracking-widest text-[14px] active:brightness-90">
+                Continue
+            </a>
+        </div>
+
+        <!-- Server rejected for a real reason -->
+        <div x-show="result === 'needs_attention'" x-cloak class="bg-error/10 border border-error/30 rounded-2xl px-5 py-6 text-center">
+            <span class="material-symbols-outlined text-error text-[44px]">error</span>
+            <p class="font-bold text-error text-[17px] mt-2">Needs attention</p>
+            <p class="text-on-surface-variant text-sm mt-1 leading-relaxed">
+                The server couldn't accept this payment. Check the End of Day summary and contact the office.
+            </p>
+            <a href="{{ route('collector.summary') }}" wire:navigate
+               class="mt-5 inline-flex items-center justify-center w-full h-[52px] bg-surface-container-high text-white border border-white/20 rounded-2xl font-bold uppercase tracking-widest text-[14px] active:brightness-90">
+                View Summary
+            </a>
+        </div>
     </section>
 
     @endif

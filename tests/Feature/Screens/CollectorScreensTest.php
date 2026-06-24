@@ -132,4 +132,37 @@ class CollectorScreensTest extends ScreenTestCase
             ->get(route('collector.summary'))
             ->assertOk();
     }
+
+    // ── Onboarding (admin/office-facing PWA setup checklist) ──────────────────
+
+    #[Test]
+    public function onboarding_page_redirects_unauthenticated_users(): void
+    {
+        $this->get(route('collector.onboarding'))->assertRedirect();
+    }
+
+    #[Test]
+    public function onboarding_page_renders_for_admin(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('collector.onboarding'))
+            ->assertOk()
+            ->assertSee('Collector App Setup');
+    }
+
+    #[Test]
+    public function onboarding_page_renders_for_collector(): void
+    {
+        $this->actingAs($this->collector)
+            ->get(route('collector.onboarding'))
+            ->assertOk();
+    }
+
+    #[Test]
+    public function onboarding_page_forbidden_for_borrower(): void
+    {
+        $this->actingAs($this->borrowerUser)
+            ->get(route('collector.onboarding'))
+            ->assertForbidden();
+    }
 }

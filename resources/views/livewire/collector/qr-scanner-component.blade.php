@@ -3,6 +3,7 @@
     x-data="{
         flashOn: false,
         scanning: false,
+        clientError: '',
         startCamera() {
             this.scanning = true;
             if (typeof Html5Qrcode === 'undefined') return;
@@ -12,10 +13,27 @@
                 { fps: 10, qrbox: { width: 240, height: 240 } },
                 (decoded) => {
                     scanner.stop();
-                    $wire.handleScan(decoded);
+                    this.resolve(decoded);
                 },
                 () => {}
             );
+        },
+        async resolve(value) {
+            // Offline-first: resolve against the cached route, not a live call.
+            if (window.collectorApp) {
+                const borrower = await window.collectorApp.db.resolveByQr(value);
+                if (borrower) {
+                    window.location.href = '{{ url('collector/payment') }}/' + borrower.borrower_id;
+                    return;
+                }
+            }
+            // Not in today's cached route. Only the server can resolve it, and
+            // only if we have signal.
+            if (navigator.onLine) {
+                $wire.handleScan(value);
+                return;
+            }
+            this.clientError = 'This borrower is not in today\'s downloaded route, and you\'re offline. Reconnect to look them up.';
         }
     }"
     x-init="startCamera()"
@@ -64,12 +82,21 @@
         </div>
     </div>
 
-    <!-- Error message -->
+    <!-- Error message (server) -->
     @if($errorMessage)
     <div class="fixed top-24 left-4 right-4 z-50 bg-error-container/90 backdrop-blur-md border border-error/30 rounded-xl px-5 py-3">
         <p class="font-label-md text-label-md text-on-error-container">{{ $errorMessage }}</p>
     </div>
     @endif
+
+    <!-- Error message (client / offline resolution) -->
+    <div x-show="clientError" x-cloak
+         class="fixed top-24 left-4 right-4 z-50 bg-error-container/90 backdrop-blur-md border border-error/30 rounded-xl px-5 py-3 flex items-start justify-between gap-3">
+        <p class="font-label-md text-label-md text-on-error-container" x-text="clientError"></p>
+        <button @click="clientError = ''; startCamera()" class="text-on-error-container/80 active:opacity-60" aria-label="Dismiss">
+            <span class="material-symbols-outlined text-[18px]">refresh</span>
+        </button>
+    </div>
 
     <!-- Bottom Actions -->
     <footer class="fixed bottom-0 w-full z-50 pb-safe px-margin-mobile pt-8 bg-gradient-to-t from-background via-background/80 to-transparent">
