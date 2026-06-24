@@ -78,10 +78,10 @@
             <span class="material-symbols-outlined">query_stats</span>
             <span class="text-[10px] font-medium">Summary</span>
         </a>
-        <a href="#"
+        <a href="{{ route('collector.profile') }}"
            class="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5 rounded-xl transition-all active:scale-90
                   {{ $activeTab === 'profile' ? 'bg-primary-fixed text-on-primary-fixed' : 'text-on-surface-variant' }}">
-            <span class="material-symbols-outlined">person</span>
+            <span class="material-symbols-outlined" @if($activeTab === 'profile') style="font-variation-settings: 'FILL' 1" @endif>person</span>
             <span class="text-[10px] font-medium">Profile</span>
         </a>
     </nav>

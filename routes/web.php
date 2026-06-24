@@ -66,6 +66,7 @@ Route::prefix('collector')->name('collector.')->middleware(['auth', 'role:collec
     Route::get('/payment/{borrowerId}', App\Livewire\Collector\RecordPaymentComponent::class)->name('payment');
     Route::get('/payment/{paymentId}/confirmed', App\Livewire\Collector\PaymentConfirmationComponent::class)->name('payment.confirmed');
     Route::get('/summary',            App\Livewire\Collector\EndOfDaySummaryComponent::class)->name('summary');
+    Route::get('/profile',            App\Livewire\Collector\ProfileComponent::class)->name('profile');
 
     // JSON API consumed by the PWA's offline cache + payment sync queue.
     Route::get('/api/route',     [App\Http\Controllers\Collector\RouteApiController::class, 'index'])->name('api.route');
