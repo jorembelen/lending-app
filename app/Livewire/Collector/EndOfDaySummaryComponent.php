@@ -17,7 +17,9 @@ class EndOfDaySummaryComponent extends Component
     public function getRouteItemsProperty(): Collection
     {
         return ScheduleItem::with('loan.borrower')
-            ->whereHas('loan', fn ($q) => $q->where('status', 'active'))
+            ->whereHas('loan', fn ($q) => $q
+                ->where('status', 'active')
+                ->where('assigned_collector_id', auth()->id()))
             ->whereDate('due_date', today())
             ->get();
     }

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Borrower;
 use App\Models\Loan;
+use App\Models\User;
 use Livewire\Component;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -35,6 +36,21 @@ class BorrowerDetailComponent extends Component
             ?? $this->loans->first();
     }
 
+    public function getCollectorsProperty()
+    {
+        return User::role('collector')->orderBy('name')->get();
+    }
+
+    public function assignCollector(int $loanId, ?int $collectorId): void
+    {
+        $loan = Loan::where('borrower_id', $this->borrowerId)->find($loanId);
+        if (! $loan) { return; }
+
+        $loan->update(['assigned_collector_id' => $collectorId ?: null]);
+
+        session()->flash('success', 'Collector assignment updated.');
+    }
+
     public function getSelectedLoanProperty(): ?Loan
     {
         if (! $this->selectedLoanId) { return null; }
@@ -43,6 +59,7 @@ class BorrowerDetailComponent extends Component
                 'payments' => fn ($q) => $q->orderBy('collected_at'),
                 'payments.collector',
                 'disbursedBy',
+                'assignedCollector',
             ])
             ->where('borrower_id', $this->borrowerId)
             ->find($this->selectedLoanId);

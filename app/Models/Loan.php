@@ -19,6 +19,7 @@ class Loan extends Model
         'total_payable',
         'disbursed_at',
         'disbursed_by_user_id',
+        'assigned_collector_id',
         'status',
         'closed_at',
         'missed_days_at_closure',
@@ -46,6 +47,11 @@ class Loan extends Model
     public function disbursedBy()
     {
         return $this->belongsTo(User::class, 'disbursed_by_user_id');
+    }
+
+    public function assignedCollector()
+    {
+        return $this->belongsTo(User::class, 'assigned_collector_id');
     }
 
     public function scheduleItems()

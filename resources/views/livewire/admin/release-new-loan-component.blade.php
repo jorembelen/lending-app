@@ -99,6 +99,24 @@
                         @error('ratePresetId') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
                     </div>
 
+                    <!-- Assigned Collector -->
+                    <div class="space-y-2">
+                        <label for="collector" class="font-label-sm text-label-sm text-secondary-fixed-dim uppercase tracking-wider block">
+                            Assign Collector
+                        </label>
+                        <select
+                            id="collector"
+                            wire:model="collectorId"
+                            class="w-full bg-surface-dim border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-fixed transition-all text-sm"
+                        >
+                            <option value="">— Select a collector —</option>
+                            @foreach($collectors as $collector)
+                            <option value="{{ $collector->id }}">{{ $collector->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('collectorId') <p class="font-label-sm text-label-sm text-error mt-1">{{ $message }}</p> @enderror
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                         <!-- Principal Amount -->
@@ -187,6 +205,12 @@
                         <span class="font-label-md text-label-md text-secondary-fixed-dim">Borrower</span>
                         <span class="font-label-md text-label-md text-on-surface text-right max-w-[140px] truncate">
                             {{ $selectedBorrower?->full_name ?? '—' }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+                        <span class="font-label-md text-label-md text-secondary-fixed-dim">Collector</span>
+                        <span class="font-label-md text-label-md text-on-surface text-right max-w-[140px] truncate">
+                            {{ $collectors->firstWhere('id', (int) $collectorId)?->name ?? '—' }}
                         </span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-outline-variant/30">

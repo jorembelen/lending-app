@@ -24,7 +24,9 @@ class TodayRouteComponent extends Component
     public function getRouteItemsProperty(): Collection
     {
         return ScheduleItem::with(['loan.borrower'])
-            ->whereHas('loan', fn ($q) => $q->where('status', 'active'))
+            ->whereHas('loan', fn ($q) => $q
+                ->where('status', 'active')
+                ->where('assigned_collector_id', auth()->id()))
             ->where(function ($q) {
                 $q->whereDate('due_date', today())
                   ->orWhere(fn ($q2) => $q2

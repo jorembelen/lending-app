@@ -281,6 +281,7 @@ class BorrowerLifecycleSeeder extends Seeder
             'total_payable'         => $total,
             'disbursed_at'          => $disbursedAt->toDateString(),
             'disbursed_by_user_id'  => $this->randomStaff()->id,
+            'assigned_collector_id' => $this->randomCollector()->id,
             'status'                => 'active',
         ]);
 

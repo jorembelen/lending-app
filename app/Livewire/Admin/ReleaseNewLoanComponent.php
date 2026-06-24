@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Borrower;
 use App\Models\Loan;
 use App\Models\RatePreset;
+use App\Models\User;
 use Livewire\Component;
 
 class ReleaseNewLoanComponent extends Component
@@ -18,6 +19,7 @@ class ReleaseNewLoanComponent extends Component
     public string    $interestRate     = '';   // rate per ₱1000
     public string    $termDays         = '';
     public string    $releaseDate      = '';
+    public string    $collectorId      = '';
 
     protected array $rules = [
         'borrowerId'   => 'required|exists:borrowers,id',
@@ -26,6 +28,7 @@ class ReleaseNewLoanComponent extends Component
         'interestRate' => 'required|numeric|min:0',
         'termDays'     => 'required|integer|min:1',
         'releaseDate'  => 'required|date',
+        'collectorId'  => 'required|exists:users,id',
     ];
 
     protected array $messages = [
@@ -35,6 +38,7 @@ class ReleaseNewLoanComponent extends Component
         'interestRate.required' => 'Rate per ₱1000 is required.',
         'termDays.required'     => 'Loan term is required.',
         'releaseDate.required'  => 'Release date is required.',
+        'collectorId.required'  => 'Please assign a collector for this loan.',
     ];
 
     public function mount(?int $borrower = null): void
@@ -99,9 +103,10 @@ class ReleaseNewLoanComponent extends Component
             'term_days_locked'     => $this->termDays,
             'daily_installment'    => $this->dailyPayment,
             'total_payable'        => $this->totalPayable,
-            'disbursed_at'         => $this->releaseDate,
-            'disbursed_by_user_id' => auth()->id(),
-            'status'               => 'active',
+            'disbursed_at'          => $this->releaseDate,
+            'disbursed_by_user_id'  => auth()->id(),
+            'assigned_collector_id' => $this->collectorId,
+            'status'                => 'active',
         ]);
 
         session()->flash('success', 'Loan released successfully.');
@@ -111,6 +116,11 @@ class ReleaseNewLoanComponent extends Component
     public function getRatePresetsProperty()
     {
         return RatePreset::where('is_active', true)->orderBy('name')->get();
+    }
+
+    public function getCollectorsProperty()
+    {
+        return User::role('collector')->orderBy('name')->get();
     }
 
     public function render()
@@ -124,6 +134,7 @@ class ReleaseNewLoanComponent extends Component
         return view('livewire.admin.release-new-loan-component', [
             'borrowerResults' => $borrowerResults,
             'ratePresets'     => $this->ratePresets,
+            'collectors'      => $this->collectors,
         ])->layout('components.layout.admin-shell', [
             'title'     => 'Release New Loan',
             'activeNav' => 'loans',

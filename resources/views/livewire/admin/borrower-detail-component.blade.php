@@ -123,6 +123,25 @@
                         <p class="font-bold text-on-surface text-sm mt-0.5">₱{{ number_format((float) $activeLoan->rate_per_1000_locked, 2) }}/₱1k</p>
                     </div>
                 </div>
+
+                <!-- Assigned Collector -->
+                <div class="mt-4 pt-4 border-t border-outline-variant/30 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="material-symbols-outlined text-[18px] text-secondary-fixed-dim">badge</span>
+                        <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Assigned Collector</span>
+                    </div>
+                    <select
+                        wire:change="assignCollector({{ $activeLoan->id }}, $event.target.value)"
+                        class="bg-surface-dim border border-outline-variant rounded-lg px-3 py-2 text-on-surface text-sm focus:outline-none focus:border-primary-fixed transition-all max-w-[180px]"
+                    >
+                        <option value="">— Unassigned —</option>
+                        @foreach($this->collectors as $collector)
+                        <option value="{{ $collector->id }}" {{ $activeLoan->assigned_collector_id == $collector->id ? 'selected' : '' }}>
+                            {{ $collector->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
             </x-ui.card>
             @endif
 
@@ -182,6 +201,10 @@
                     <p class="font-label-sm text-label-sm text-secondary-fixed-dim mt-0.5">
                         Released {{ $sl->disbursed_at?->format('F j, Y') ?? '—' }}
                         @if($sl->disbursedBy) · by {{ $sl->disbursedBy->name }} @endif
+                    </p>
+                    <p class="font-label-sm text-label-sm text-secondary-fixed-dim mt-0.5 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">badge</span>
+                        Collector: {{ $sl->assignedCollector?->name ?? 'Unassigned' }}
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
